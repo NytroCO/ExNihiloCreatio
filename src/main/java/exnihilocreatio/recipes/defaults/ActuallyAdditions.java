@@ -13,9 +13,9 @@ public class ActuallyAdditions implements IRecipeDefaults {
     @Nullable
     @GameRegistry.ObjectHolder("actuallyadditions:item_misc")
     // 5 = Black Quartz
-    public static final Item AA_ITEM_MISC = null;
+    private static final Item AA_ITEM_MISC = null;
     @Getter
-    public String MODID = "actuallyadditions";
+    private final String MODID = "actuallyadditions";
 
     public void registerSieve(SieveRegistry registry) {
         // Actually Additions crashes if these are actually registered
