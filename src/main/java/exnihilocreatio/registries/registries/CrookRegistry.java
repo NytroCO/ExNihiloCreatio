@@ -91,6 +91,14 @@ public class CrookRegistry extends BaseRegistryMap<Ingredient, List<CrookReward>
         return registry.keySet().stream().anyMatch(ingredient -> ingredient.test(stack));
     }
 
+    public boolean isRegistered(IBlockState state) {
+        return isRegistered(new BlockInfo(state));
+    }
+
+    public boolean isRegistered(BlockInfo stackInfo) {
+        return registry.keySet().stream().anyMatch(ingredient -> ingredient.test(stackInfo.getItemStack()));
+    }
+
     public List<CrookReward> getRewards(IBlockState state) {
         BlockInfo info = new BlockInfo(state);
         ArrayList<CrookReward> list = new ArrayList<>();
