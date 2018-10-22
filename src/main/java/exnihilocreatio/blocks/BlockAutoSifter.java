@@ -41,10 +41,14 @@ public class BlockAutoSifter extends BlockBase implements ITileEntityProvider {
         return new TileAutoSifter();
     }
 
+    private TileAutoSifter getTe(World world, BlockPos pos) {
+        return (TileAutoSifter) world.getTileEntity(pos);
+    }
+
+    //region >>>> RENDERING OPTIONS
     @Override
-    @Nonnull
-    protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, PART_TYPE);
+    public boolean isFullBlock(IBlockState state) {
+        return false;
     }
 
     @Override
@@ -58,19 +62,8 @@ public class BlockAutoSifter extends BlockBase implements ITileEntityProvider {
         return 0;
     }
 
-    private TileAutoSifter getTe(World world, BlockPos pos) {
-        return (TileAutoSifter) world.getTileEntity(pos);
-    }
-
     @Override
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-        TileAutoSifter te = getTe(worldIn, pos);
-        te.facing = placer.getHorizontalFacing();
-    }
-
-    //region >>>> RENDERING OPTIONS
-    @Override
-    public boolean isFullBlock(IBlockState state) {
+    public boolean isBlockNormalCube(IBlockState state) {
         return false;
     }
 
@@ -84,25 +77,32 @@ public class BlockAutoSifter extends BlockBase implements ITileEntityProvider {
         return false;
     }
 
-    @SideOnly(Side.CLIENT)
-    @Nonnull
-    public BlockRenderLayer getBlockLayer() {
-        return BlockRenderLayer.CUTOUT;
-    }
-
     @Override
     public boolean shouldSideBeRendered(IBlockState blockState, @Nonnull IBlockAccess blockAccess, @Nonnull BlockPos pos, EnumFacing side) {
         return false;
     }
 
     @Override
-    public boolean isBlockNormalCube(IBlockState state) {
+    public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
 
     @Override
-    public boolean isOpaqueCube(IBlockState state) {
-        return false;
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+        TileAutoSifter te = getTe(worldIn, pos);
+        te.facing = placer.getHorizontalFacing();
+    }
+
+    @Override
+    @Nonnull
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, PART_TYPE);
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Nonnull
+    public BlockRenderLayer getBlockLayer() {
+        return BlockRenderLayer.CUTOUT;
     }
     //endregion
 }

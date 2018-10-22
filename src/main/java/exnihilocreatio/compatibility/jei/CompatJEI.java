@@ -75,6 +75,10 @@ public class CompatJEI implements IModPlugin {
         registerStoneCrucible(registry);
     }
 
+    @Override
+    public void onRuntimeAvailable(@Nonnull IJeiRuntime jeiRuntime) {
+    }
+
     private void registerCompost(@Nonnull IModRegistry registry) {
         List<CompostRecipe> compostRecipes = ExNihiloRegistryManager.COMPOST_REGISTRY.getRecipeList();
 
@@ -83,7 +87,6 @@ public class CompatJEI implements IModPlugin {
         registry.addRecipeCatalyst(new ItemStack(ModBlocks.barrelStone), CompostRecipeCategory.UID);
         LogUtil.info("JEI: Compost Recipe Pages Loaded:         " + compostRecipes.size());
     }
-
 
     private void registerFluidBlockTransform(@Nonnull IModRegistry registry) {
         List<FluidBlockTransformRecipe> fluidBlockTransformRecipes = ExNihiloRegistryManager.FLUID_BLOCK_TRANSFORMER_REGISTRY.getRecipeList();
@@ -147,9 +150,5 @@ public class CompatJEI implements IModPlugin {
         registry.addRecipes(crucibleRecipes, CrucibleRecipeCategory.UID);
         registry.addRecipeCatalyst(new ItemStack(ModBlocks.crucibleStone, 1, 1), CrucibleRecipeCategory.UID);
         LogUtil.info("JEI: Stone Crucible Recipes Loaded:       " + crucibleRecipes.size());
-    }
-
-    @Override
-    public void onRuntimeAvailable(@Nonnull IJeiRuntime jeiRuntime) {
     }
 }

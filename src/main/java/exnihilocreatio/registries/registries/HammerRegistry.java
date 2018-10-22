@@ -31,13 +31,14 @@ public class HammerRegistry extends BaseRegistryMap<Ingredient, List<HammerRewar
         super(
                 new GsonBuilder()
                         .setPrettyPrinting()
-                        .registerTypeAdapter(ItemStack.class,  CustomItemStackJson.INSTANCE)
-                        .registerTypeAdapter(Ingredient.class,  CustomIngredientJson.INSTANCE)
-                        .registerTypeAdapter(OreIngredientStoring.class,  CustomIngredientJson.INSTANCE)
-                        .registerTypeAdapter(HammerReward.class,  CustomHammerRewardJson.INSTANCE)
+                        .registerTypeAdapter(ItemStack.class, CustomItemStackJson.INSTANCE)
+                        .registerTypeAdapter(Ingredient.class, CustomIngredientJson.INSTANCE)
+                        .registerTypeAdapter(OreIngredientStoring.class, CustomIngredientJson.INSTANCE)
+                        .registerTypeAdapter(HammerReward.class, CustomHammerRewardJson.INSTANCE)
                         .enableComplexMapKeySerialization()
                         .create(),
-                new com.google.gson.reflect.TypeToken<Map<Ingredient, List<HammerReward>>>() {}.getType(),
+                new com.google.gson.reflect.TypeToken<Map<Ingredient, List<HammerReward>>>() {
+                }.getType(),
                 ExNihiloRegistryManager.HAMMER_DEFAULT_REGISTRY_PROVIDERS
         );
     }
@@ -60,6 +61,17 @@ public class HammerRegistry extends BaseRegistryMap<Ingredient, List<HammerRewar
                 registry.put(ingredient, drops);
             }
         }
+    }
+
+    @Override
+    public List<HammerRecipe> getRecipeList() {
+        List<HammerRecipe> hammerRecipes = Lists.newLinkedList();
+        getRegistry().keySet().forEach(ingredient -> {
+            HammerRecipe recipe = new HammerRecipe(ingredient);
+            if (recipe.isValid())
+                hammerRecipes.add(recipe);
+        });
+        return hammerRecipes;
     }
 
     /**
@@ -150,16 +162,16 @@ public class HammerRegistry extends BaseRegistryMap<Ingredient, List<HammerRewar
         return isRegistered(new BlockInfo(block.getDefaultState()));
     }
 
+    public boolean isRegistered(BlockInfo stackInfo) {
+        return registry.keySet().stream().anyMatch(ingredient -> ingredient.test(stackInfo.getItemStack()));
+    }
+
     /**
      * Just so that tinkers complement doesn't crash
      */
     @Deprecated
     public boolean registered(Block block) {
         return isRegistered(new BlockInfo(block.getDefaultState()));
-    }
-
-    public boolean isRegistered(BlockInfo stackInfo) {
-        return registry.keySet().stream().anyMatch(ingredient -> ingredient.test(stackInfo.getItemStack()));
     }
 
     // Legacy TODO: REMOVE if it works with ex compressum
@@ -172,16 +184,5 @@ public class HammerRegistry extends BaseRegistryMap<Ingredient, List<HammerRewar
                 .forEach(entry -> entry.getValue().stream().filter(value -> value.getMiningLevel() <= miningLevel).forEach(drops::add));
 
         return drops;
-    }
-
-    @Override
-    public List<HammerRecipe> getRecipeList() {
-        List<HammerRecipe> hammerRecipes = Lists.newLinkedList();
-        getRegistry().keySet().forEach(ingredient -> {
-            HammerRecipe recipe = new HammerRecipe(ingredient);
-            if (recipe.isValid())
-                hammerRecipes.add(recipe);
-        });
-        return hammerRecipes;
     }
 }

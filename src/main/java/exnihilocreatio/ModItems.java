@@ -39,7 +39,7 @@ public class ModItems {
     public static final HammerBase hammerDiamond = new HammerBase("hammer_diamond", 4096, Item.ToolMaterial.DIAMOND);
     public static final HammerBase hammerGold = new HammerBase("hammer_gold", 64, Item.ToolMaterial.GOLD);
 
-    public static final CrookBase crookWood = new CrookBase("crook_wood", 64,0);
+    public static final CrookBase crookWood = new CrookBase("crook_wood", 64, 0);
     public static final CrookBase crookBone = new CrookBase("crook_bone", 256, 1);
 
     public static final ItemMesh mesh = new ItemMesh();
@@ -88,7 +88,7 @@ public class ModItems {
         registerOredicts();
     }
 
-    public static void registerOredicts(){
+    public static void registerOredicts() {
         OreDictionary.registerOre("clayPorcelain", ItemResource.getResourceStack(ItemResource.PORCELAIN_CLAY));
         OreDictionary.registerOre("gearStone", ItemResource.getResourceStack(ItemResource.GEAR_STONE));
         OreDictionary.registerOre("stickStone", ItemResource.getResourceStack(ItemResource.ROD_STONE));
@@ -99,7 +99,7 @@ public class ModItems {
         OreDictionary.registerOre("crushedDiorite", ModBlocks.crushedDiorite);
 
 
-        if (ModConfig.misc.oredictVanillaItems){
+        if (ModConfig.misc.oredictVanillaItems) {
             // Flowers:
             OreDictionary.registerOre("flower", new ItemStack(Blocks.RED_FLOWER, 1, OreDictionary.WILDCARD_VALUE));
             OreDictionary.registerOre("flower", new ItemStack(Blocks.DOUBLE_PLANT, 1, OreDictionary.WILDCARD_VALUE));
@@ -115,17 +115,17 @@ public class ModItems {
         }
 
 
-        if (ModConfig.misc.oredictExNihiloSeeds){
+        if (ModConfig.misc.oredictExNihiloSeeds) {
             // Seeds
-            for(ItemSeedBase seed : itemSeeds){
-                OreDictionary.registerOre("listAllseed", (Item) seed);
+            for (ItemSeedBase seed : itemSeeds) {
+                OreDictionary.registerOre("listAllseed", seed);
             }
             // Grass Seeds
-            OreDictionary.registerOre("listAllseed", new ItemStack((Item) resources, 1, 4));
+            OreDictionary.registerOre("listAllseed", new ItemStack(resources, 1, 4));
         }
 
         ItemOre oreYellorium = ExNihiloRegistryManager.ORE_REGISTRY.getOreItem("yellorium");
-        if (ModConfig.compatibility.addYelloriteOreDict && oreYellorium != null){
+        if (ModConfig.compatibility.addYelloriteOreDict && oreYellorium != null) {
             OreDictionary.registerOre("oreYellorite", new ItemStack(oreYellorium, 1, EnumOreSubtype.CHUNK.getMeta()));
             OreDictionary.registerOre("oreUranium", new ItemStack(oreYellorium, 1, EnumOreSubtype.CHUNK.getMeta()));
             OreDictionary.registerOre("dustUranium", new ItemStack(oreYellorium, 1, EnumOreSubtype.DUST.getMeta()));

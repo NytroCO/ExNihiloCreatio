@@ -45,7 +45,7 @@ public class BlockInfo implements StackInfo {
      * or want to compare against a very specific state,
      * otherwise use block, meta or just block
      */
-    public BlockInfo(@Nonnull IBlockState state){
+    public BlockInfo(@Nonnull IBlockState state) {
         this.state = state;
     }
 
@@ -98,16 +98,14 @@ public class BlockInfo implements StackInfo {
                 return;
         }
 
-        if (block == null){
+        if (block == null) {
             this.state = Blocks.AIR.getDefaultState();
             this.isWildcard = true;
-        }
-        else {
+        } else {
             if (meta == -1 || meta == OreDictionary.WILDCARD_VALUE) {
                 this.state = getStateFromMeta(block, 0);
                 this.isWildcard = true;
-            }
-            else {
+            } else {
                 this.state = getStateFromMeta(block, meta);
                 checkWildcard();
             }
@@ -127,7 +125,7 @@ public class BlockInfo implements StackInfo {
      * catch any errors and return a default state instead.
      */
     @Nonnull
-    public static IBlockState getStateFromMeta(Block block, int meta){
+    public static IBlockState getStateFromMeta(Block block, int meta) {
         try {
             return block.getStateFromMeta(meta);
         } catch (Exception e) {
@@ -135,7 +133,7 @@ public class BlockInfo implements StackInfo {
         }
     }
 
-    private void checkWildcard(){
+    private void checkWildcard() {
         // This checks if the block has sub items or not.
         // If not, accept any block that matches this, otherwise
         // Only accept blocks with meta 0
@@ -146,12 +144,6 @@ public class BlockInfo implements StackInfo {
     }
 
     //StackInfo
-
-    @Override
-    public String toString() {
-        int meta = getMeta();
-        return ForgeRegistries.BLOCKS.getKey(state.getBlock()) + (meta == 0 ? "" : (":" + meta));
-    }
 
     @Nonnull
     @Override
@@ -171,6 +163,11 @@ public class BlockInfo implements StackInfo {
         return state.getBlock();
     }
 
+    @Override
+    public int getMeta() {
+        return isWildcard ? -1 : state.getBlock().getMetaFromState(state);
+    }
+
     @Nonnull
     @Override
     public IBlockState getBlockState() {
@@ -178,8 +175,8 @@ public class BlockInfo implements StackInfo {
     }
 
     @Override
-    public int getMeta() {
-        return isWildcard ? -1 : state.getBlock().getMetaFromState(state);
+    public boolean isValid() {
+        return this.state != Blocks.AIR.getDefaultState();
     }
 
     @Override
@@ -188,11 +185,6 @@ public class BlockInfo implements StackInfo {
         tag.setInteger("meta", state.getBlock().getMetaFromState(state));
 
         return tag;
-    }
-
-    @Override
-    public boolean isValid() {
-        return this.state != Blocks.AIR.getDefaultState();
     }
 
     @Override
@@ -207,7 +199,7 @@ public class BlockInfo implements StackInfo {
      */
     @Override
     public boolean equals(Object other) {
-        if (isWildcard){
+        if (isWildcard) {
             if (other instanceof BlockInfo)
                 return Block.isEqualTo(state.getBlock(), ((BlockInfo) other).getBlock());
             else if (other instanceof ItemInfo)
@@ -215,12 +207,11 @@ public class BlockInfo implements StackInfo {
             else if (other instanceof ItemStack)
                 return Block.isEqualTo(state.getBlock(), Block.getBlockFromItem(((ItemStack) other).getItem()));
             else if (other instanceof Block)
-                return Block.isEqualTo(state.getBlock(), (Block)other);
+                return Block.isEqualTo(state.getBlock(), (Block) other);
             else if (other instanceof ItemBlock) {
                 return Block.isEqualTo(state.getBlock(), ((ItemBlock) other).getBlock());
             }
-        }
-        else {
+        } else {
             if (other instanceof BlockInfo)
                 return state == ((BlockInfo) other).state;
             else if (other instanceof ItemInfo)
@@ -228,12 +219,18 @@ public class BlockInfo implements StackInfo {
             else if (other instanceof ItemStack)
                 return state == BlockInfo.getStateFromMeta(Block.getBlockFromItem(((ItemStack) other).getItem()), ((ItemStack) other).getItemDamage());
             else if (other instanceof Block)
-                return Block.isEqualTo(state.getBlock(), (Block)other);
+                return Block.isEqualTo(state.getBlock(), (Block) other);
             else if (other instanceof ItemBlock) {
                 return Block.isEqualTo(state.getBlock(), ((ItemBlock) other).getBlock());
             }
         }
 
         return false;
+    }
+
+    @Override
+    public String toString() {
+        int meta = getMeta();
+        return ForgeRegistries.BLOCKS.getKey(state.getBlock()) + (meta == 0 ? "" : (":" + meta));
     }
 }

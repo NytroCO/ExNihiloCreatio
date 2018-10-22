@@ -39,26 +39,8 @@ public class InfestedLeavesBakedModel implements IBakedModel {
 
     @Override
     @Nonnull
-    public TextureAtlasSprite getParticleTexture() {
-        return this.particleTexture;
-    }
-
-
-    @Override
-    @Nonnull
     public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand) {
         return handleBlockState(state).getQuads(state, side, rand);
-    }
-
-    @Override
-    @Nonnull
-    public ItemCameraTransforms getItemCameraTransforms() {
-        return defaultModel.getItemCameraTransforms();
-    }
-
-    @Override
-    public boolean isBuiltInRenderer() {
-        return defaultModel.isBuiltInRenderer();
     }
 
     @Override
@@ -69,6 +51,23 @@ public class InfestedLeavesBakedModel implements IBakedModel {
     @Override
     public boolean isGui3d() {
         return defaultModel.isGui3d();
+    }
+
+    @Override
+    public boolean isBuiltInRenderer() {
+        return defaultModel.isBuiltInRenderer();
+    }
+
+    @Override
+    @Nonnull
+    public TextureAtlasSprite getParticleTexture() {
+        return this.particleTexture;
+    }
+
+    @Override
+    @Nonnull
+    public ItemCameraTransforms getItemCameraTransforms() {
+        return defaultModel.getItemCameraTransforms();
     }
 
     @Override

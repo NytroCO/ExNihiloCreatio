@@ -25,30 +25,6 @@ object Sieve {
         CrTIntegration.removeActions += ENCRemoveAll(ExNihiloRegistryManager.SIEVE_REGISTRY, "Sieve")
     }
 
-    @ZenMethod
-    @JvmStatic
-    fun addStringMeshRecipe(block: IIngredient, drop: IItemStack, chance: Float) {
-        CrTIntegration.addActions += AddRecipe(block, drop, chance, BlockSieve.MeshType.STRING)
-    }
-
-    @ZenMethod
-    @JvmStatic
-    fun addFlintMeshRecipe(block: IIngredient, drop: IItemStack, chance: Float) {
-        CrTIntegration.addActions += AddRecipe(block, drop, chance, BlockSieve.MeshType.FLINT)
-    }
-
-    @ZenMethod
-    @JvmStatic
-    fun addIronMeshRecipe(block: IIngredient, drop: IItemStack, chance: Float) {
-        CrTIntegration.addActions += AddRecipe(block, drop, chance, BlockSieve.MeshType.IRON)
-    }
-
-    @ZenMethod
-    @JvmStatic
-    fun addDiamondMeshRecipe(block: IIngredient, drop: IItemStack, chance: Float) {
-        CrTIntegration.addActions += AddRecipe(block, drop, chance, BlockSieve.MeshType.DIAMOND)
-    }
-
     private class AddRecipe(
             block: IIngredient,
             private val drop: IItemStack,

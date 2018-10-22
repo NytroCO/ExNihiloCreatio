@@ -16,7 +16,7 @@ public class EnderIO implements IRecipeDefaults {
     public String MODID = "enderio";
 
     public void registerSieve(SieveRegistry registry) {
-        if (EIO_DUST_BEDROCK != null){
+        if (EIO_DUST_BEDROCK != null) {
             registry.register("dust", new ItemInfo(EIO_DUST_BEDROCK, 20), 0.01f, BlockSieve.MeshType.DIAMOND.getID());
         }
     }

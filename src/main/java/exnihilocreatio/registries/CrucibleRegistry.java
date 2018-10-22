@@ -5,6 +5,7 @@ import exnihilocreatio.registries.types.Meltable;
 import exnihilocreatio.util.ItemInfo;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
+
 /**
  * @deprecated use classes from [{@link exnihilocreatio.api.ExNihiloCreatioAPI}]
  */

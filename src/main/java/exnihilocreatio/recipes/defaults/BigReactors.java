@@ -31,16 +31,6 @@ public class BigReactors implements IRecipeDefaults {
         }
     }
 
-    public void registerOreChunks(OreRegistry registry) {
-        // 0 = Yellorium
-        Item yellorium = Item.getByNameOrId("bigreactors:ingotmetals");
-        if (yellorium != null) {
-            registry.register("yellorium", new Color("DCF400"), new ItemInfo(yellorium, 0));
-            ItemOre ore = ExNihiloRegistryManager.ORE_REGISTRY.getOreItem("yellorium");
-            registry.getSieveBlackList().add(ore); //Disables the default sieve recipes
-        }
-    }
-
     public void registerHeat(HeatRegistry registry) {
         // 0 = Yellorium
         // 1 = Cyanite
@@ -50,6 +40,16 @@ public class BigReactors implements IRecipeDefaults {
             registry.register(new BlockInfo(brBlocks), 10);
             registry.register(new BlockInfo(brBlocks, 1), 15);
             registry.register(new BlockInfo(brBlocks, 3), 20);
+        }
+    }
+
+    public void registerOreChunks(OreRegistry registry) {
+        // 0 = Yellorium
+        Item yellorium = Item.getByNameOrId("bigreactors:ingotmetals");
+        if (yellorium != null) {
+            registry.register("yellorium", new Color("DCF400"), new ItemInfo(yellorium, 0));
+            ItemOre ore = ExNihiloRegistryManager.ORE_REGISTRY.getOreItem("yellorium");
+            registry.getSieveBlackList().add(ore); //Disables the default sieve recipes
         }
     }
 }

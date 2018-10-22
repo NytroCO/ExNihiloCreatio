@@ -22,8 +22,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -49,16 +47,13 @@ public class BlockStoneAxle extends BlockBase implements ITileEntityProvider, IT
         return new TileStoneAxle();
     }
 
-    @Override
-    @Nonnull
-    public IBlockState getActualState(@Nonnull IBlockState state, IBlockAccess worldIn, BlockPos pos) {
-        return state.withProperty(IS_AXLE, false);
+    private TileStoneAxle getTe(IBlockAccess world, BlockPos pos) {
+        return (TileStoneAxle) world.getTileEntity(pos);
     }
 
     @Override
-    @Nonnull
-    protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, IS_AXLE);
+    public boolean isFullBlock(IBlockState state) {
+        return false;
     }
 
     @Override
@@ -73,32 +68,13 @@ public class BlockStoneAxle extends BlockBase implements ITileEntityProvider, IT
     }
 
     @Override
-    public boolean shouldSideBeRendered(IBlockState blockState, @Nonnull IBlockAccess blockAccess, @Nonnull BlockPos pos, EnumFacing side) {
-        return false;
+    @Nonnull
+    public IBlockState getActualState(@Nonnull IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+        return state.withProperty(IS_AXLE, false);
     }
 
     @Override
     public boolean isBlockNormalCube(IBlockState state) {
-        return false;
-    }
-
-    @Override
-    public boolean isOpaqueCube(IBlockState state) {
-        return false;
-    }
-
-    private TileStoneAxle getTe(IBlockAccess world, BlockPos pos) {
-        return (TileStoneAxle) world.getTileEntity(pos);
-    }
-
-    @Override
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-        TileStoneAxle te = getTe(worldIn, pos);
-        te.facing = placer.getHorizontalFacing();
-    }
-
-    @Override
-    public boolean isFullBlock(IBlockState state) {
         return false;
     }
 
@@ -112,44 +88,46 @@ public class BlockStoneAxle extends BlockBase implements ITileEntityProvider, IT
         return false;
     }
 
-    @Nullable
-    @Override
-    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, @Nonnull IBlockAccess worldIn, @Nonnull BlockPos pos) {
-        TileEntity te = worldIn.getTileEntity(pos);
-        if (te != null && te instanceof TileStoneAxle) {
-            switch (((TileStoneAxle) te).facing) {
-
-                case DOWN:
-                case UP:
-                case NORTH:
-                case SOUTH:
-                    return hitboxSN;
-                case WEST:
-                case EAST:
-                    return hitboxEW;
-            }
-        }
-        return FULL_BLOCK_AABB;
-    }
-
     @Override
     @Nonnull
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
         TileEntity te = source.getTileEntity(pos);
         if (te != null && te instanceof TileStoneAxle) {
-            switch (((TileStoneAxle) te).facing) {
-
-                case DOWN:
-                case UP:
-                case NORTH:
-                case SOUTH:
-                    return hitboxSN;
-                case WEST:
-                case EAST:
-                    return hitboxEW;
-            }
+            return getAABBFromFacing((TileStoneAxle) te);
         }
         return FULL_BLOCK_AABB;
+    }
+
+    @Override
+    public boolean shouldSideBeRendered(IBlockState blockState, @Nonnull IBlockAccess blockAccess, @Nonnull BlockPos pos, EnumFacing side) {
+        return false;
+    }
+
+    @Nullable
+    @Override
+    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, @Nonnull IBlockAccess worldIn, @Nonnull BlockPos pos) {
+        TileEntity te = worldIn.getTileEntity(pos);
+        if (te instanceof TileStoneAxle) {
+            return getAABBFromFacing((TileStoneAxle) te);
+        }
+        return FULL_BLOCK_AABB;
+    }
+
+    @Override
+    public boolean isOpaqueCube(IBlockState state) {
+        return false;
+    }
+
+    @Override
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+        TileStoneAxle te = getTe(worldIn, pos);
+        te.facing = placer.getHorizontalFacing();
+    }
+
+    @Override
+    @Nonnull
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, IS_AXLE);
     }
 
     @Override
@@ -166,5 +144,19 @@ public class BlockStoneAxle extends BlockBase implements ITileEntityProvider, IT
             probeInfo.text(TextFormatting.BLUE + "Facing: " + axle.facing.getName());
         }
 
+    }
+
+    public AxisAlignedBB getAABBFromFacing(TileStoneAxle te) {
+        switch (te.facing) {
+            case DOWN:
+            case UP:
+            case NORTH:
+            case SOUTH:
+                return hitboxSN;
+            case WEST:
+            case EAST:
+                return hitboxEW;
+        }
+        return null;
     }
 }

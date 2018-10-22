@@ -16,7 +16,7 @@ public class IngredientUtil {
         } else {
             String[] split = s.split(":");
             if (split.length >= 2) {
-                Item item = Item.getByNameOrId(split[0]+ ":" + split[1]);
+                Item item = Item.getByNameOrId(split[0] + ":" + split[1]);
 
                 if (item == null) {
                     LogUtil.error("Error parsing Ingredient String: Invalid Item: " + s);
@@ -31,7 +31,7 @@ public class IngredientUtil {
                         ItemStack stack = new ItemStack(item, 1, meta);
                         return CraftingHelper.getIngredient(stack);
 
-                    } catch (NumberFormatException ignored){
+                    } catch (NumberFormatException ignored) {
                         LogUtil.error("Number error in json: " + s);
                     }
                 } else {

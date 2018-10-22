@@ -5,7 +5,6 @@ import exnihilocreatio.api.registries.IRegistry;
 import exnihilocreatio.config.ModConfig;
 import exnihilocreatio.registries.manager.IDefaultRecipeProvider;
 import lombok.Getter;
-import org.apache.commons.io.IOUtils;
 
 import javax.annotation.Nonnull;
 import java.io.File;
@@ -32,7 +31,7 @@ public abstract class BaseRegistry<RegType> implements IRegistry<RegType> {
     }
 
     public void saveJson(File file) {
-        try(FileWriter fw = new FileWriter(file)) {
+        try (FileWriter fw = new FileWriter(file)) {
             // TODO remove null again
             if (typeOfSource != null) {
                 gson.toJson(registry, typeOfSource, fw);
@@ -48,7 +47,7 @@ public abstract class BaseRegistry<RegType> implements IRegistry<RegType> {
         if (hasAlreadyBeenLoaded) clearRegistry();
 
         if (file.exists() && ModConfig.misc.enableJSONLoading) {
-            try(FileReader fr = new FileReader(file)) {
+            try (FileReader fr = new FileReader(file)) {
                 registerEntriesFromJSON(fr);
 
             } catch (Exception e) {

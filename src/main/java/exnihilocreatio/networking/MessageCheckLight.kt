@@ -12,7 +12,7 @@ import net.minecraftforge.fml.relauncher.SideOnly
 // When all else fails, do it yourself
 // (I couldn't find any way to force a lighting update on the client without some blockstate hackery)
 // (I thought packet hackery would be better)
-class MessageCheckLight(): IMessage {
+class MessageCheckLight() : IMessage {
     var x: Int = 0
         private set
     var y: Int = 0
@@ -20,7 +20,7 @@ class MessageCheckLight(): IMessage {
     var z: Int = 0
         private set
 
-    constructor(pos: BlockPos) : this(){
+    constructor(pos: BlockPos) : this() {
         x = pos.x
         y = pos.y
         z = pos.z

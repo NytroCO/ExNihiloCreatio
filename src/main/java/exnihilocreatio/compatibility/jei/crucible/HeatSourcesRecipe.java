@@ -34,11 +34,10 @@ import java.util.List;
 
 // Credit goes to >>>> https://github.com/thraaawn/CompactMachines/blob/1.12.1/src/main/java/org/dave/compactmachines3/jei/MultiblockRecipeWrapper.java
 public class HeatSourcesRecipe implements IRecipeWrapper {
+    private static final Item torch = Item.getItemFromBlock(Blocks.TORCH);
     private final List<ItemStack> inputs;
     private final BlockInfo blockInfo;
     private final String heatAmountString;
-
-    private static final Item torch = Item.getItemFromBlock(Blocks.TORCH);
 
     public HeatSourcesRecipe(BlockInfo blockInfo, int heatAmount) {
         this.blockInfo = blockInfo;

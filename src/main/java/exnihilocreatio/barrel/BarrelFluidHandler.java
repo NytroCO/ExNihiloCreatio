@@ -35,23 +35,6 @@ public class BarrelFluidHandler extends FluidTank {
     }
 
     @Override
-    public boolean canFillFluidType(FluidStack fluid) {
-        if (fluid == null || fluid.getFluid() == null || ExNihiloRegistryManager.BARREL_LIQUID_BLACKLIST_REGISTRY.isBlacklisted(barrel.getTier(), fluid.getFluid().getName()))
-            return false;
-
-        for (IBarrelMode mode : BarrelModeRegistry.getModes(TriggerType.FLUID)) {
-            if (mode.isTriggerFluidStack(fluid))
-                return true;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean canFill() {
-        return barrel.getMode() == null || barrel.getMode().canFillWithFluid(barrel);
-    }
-
-    @Override
     public int fill(FluidStack resource, boolean doFill) {
         if (barrel.getMode() != null && !barrel.getMode().canFillWithFluid(barrel))
             return 0;
@@ -91,6 +74,23 @@ public class BarrelFluidHandler extends FluidTank {
             PacketHandler.sendToAllAround(new MessageBarrelModeUpdate("null", barrel.getPos()), barrel);
         }
         return stack;
+    }
+
+    @Override
+    public boolean canFill() {
+        return barrel.getMode() == null || barrel.getMode().canFillWithFluid(barrel);
+    }
+
+    @Override
+    public boolean canFillFluidType(FluidStack fluid) {
+        if (fluid == null || fluid.getFluid() == null || ExNihiloRegistryManager.BARREL_LIQUID_BLACKLIST_REGISTRY.isBlacklisted(barrel.getTier(), fluid.getFluid().getName()))
+            return false;
+
+        for (IBarrelMode mode : BarrelModeRegistry.getModes(TriggerType.FLUID)) {
+            if (mode.isTriggerFluidStack(fluid))
+                return true;
+        }
+        return false;
     }
 
     @Override

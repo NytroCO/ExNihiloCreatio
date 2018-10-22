@@ -51,17 +51,6 @@ public class TileInfestingLeaves extends BaseTileEntity implements ITickable, IT
         }
     }
 
-    @Override
-    public boolean shouldRefresh(World world, BlockPos pos, @Nonnull IBlockState oldState, @Nonnull IBlockState newState) {
-        return oldState.getBlock() != newState.getBlock();
-    }
-
-    @Override
-    @Nonnull
-    public AxisAlignedBB getRenderBoundingBox() {
-        return INFINITE_EXTENT_AABB;
-    }
-
     public void setProgress(int newProgress) {
         progress = newProgress;
         PacketHandler.sendNBTUpdate(this);
@@ -70,6 +59,26 @@ public class TileInfestingLeaves extends BaseTileEntity implements ITickable, IT
     public void setLeafBlock(IBlockState block) {
         leafBlock = block;
         PacketHandler.sendNBTUpdate(this);
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public void readFromNBT(NBTTagCompound tag) {
+        super.readFromNBT(tag);
+        progress = tag.getInteger("progress");
+
+        leafBlock = getLeafFromBlock(tag);
+    }
+
+    public static IBlockState getLeafFromBlock(NBTTagCompound tag) {
+        if (tag.hasKey("leafBlock") && tag.hasKey("leafBlockMeta")) {
+            BlockInfo leaves = new BlockInfo(Block.getBlockFromName(tag.getString("leafBlock")), tag.getInteger("leafBlockMeta"));
+            if (leaves.isValid())
+                return leaves.getBlockState();
+            else return Blocks.LEAVES.getDefaultState();
+        } else {
+            return Blocks.LEAVES.getDefaultState();
+        }
     }
 
     @Override
@@ -82,20 +91,15 @@ public class TileInfestingLeaves extends BaseTileEntity implements ITickable, IT
         return tag;
     }
 
-    @SuppressWarnings("deprecation")
     @Override
-    public void readFromNBT(NBTTagCompound tag) {
-        super.readFromNBT(tag);
-        progress = tag.getInteger("progress");
+    public boolean shouldRefresh(World world, BlockPos pos, @Nonnull IBlockState oldState, @Nonnull IBlockState newState) {
+        return oldState.getBlock() != newState.getBlock();
+    }
 
-        if (tag.hasKey("leafBlock") && tag.hasKey("leafBlockMeta")) {
-            BlockInfo leaves = new BlockInfo(Block.getBlockFromName(tag.getString("leafBlock")), tag.getInteger("leafBlockMeta"));
-            if (leaves.isValid())
-                leafBlock = leaves.getBlockState();
-            else leafBlock = Blocks.LEAVES.getDefaultState();
-        } else {
-            leafBlock = Blocks.LEAVES.getDefaultState();
-        }
+    @Override
+    @Nonnull
+    public AxisAlignedBB getRenderBoundingBox() {
+        return INFINITE_EXTENT_AABB;
     }
 
     @Override

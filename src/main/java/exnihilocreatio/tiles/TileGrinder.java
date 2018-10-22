@@ -37,21 +37,19 @@ public class TileGrinder extends BaseTileEntity implements ITickable, IRotationa
         }
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public <T> T getCapability(@Nonnull Capability<T> capability, EnumFacing facing) {
-        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
-            return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(itemHandlerGrinder);
-        if (capability == CapabilityRotationalMember.ROTIONAL_MEMBER)
-            return CapabilityRotationalMember.ROTIONAL_MEMBER.cast(this);
-        return super.getCapability(capability, facing);
-    }
+    public void readFromNBT(NBTTagCompound tag) {
+        // if (tag.hasKey("currentItem")) {
+        //     currentItem = ItemInfo.readFromNBT(tag.getCompoundTag("currentItem"));
+        // } else {
+        //     currentItem = null;
+        // } TODO: see above
 
-    @Override
-    public boolean hasCapability(@Nonnull Capability<?> capability, EnumFacing facing) {
-        return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ||
-                (capability == CapabilityRotationalMember.ROTIONAL_MEMBER && facing == this.facing) ||
-                super.hasCapability(capability, facing);
+        if (tag.hasKey("itemHandler")) {
+            itemHandlerGrinder.deserializeNBT((NBTTagCompound) tag.getTag("itemHandlerIn"));
+        }
+
+        super.readFromNBT(tag);
     }
 
     @Override
@@ -70,18 +68,20 @@ public class TileGrinder extends BaseTileEntity implements ITickable, IRotationa
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound tag) {
-        // if (tag.hasKey("currentItem")) {
-        //     currentItem = ItemInfo.readFromNBT(tag.getCompoundTag("currentItem"));
-        // } else {
-        //     currentItem = null;
-        // } TODO: see above
+    public boolean hasCapability(@Nonnull Capability<?> capability, EnumFacing facing) {
+        return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ||
+                (capability == CapabilityRotationalMember.ROTIONAL_MEMBER && facing == this.facing) ||
+                super.hasCapability(capability, facing);
+    }
 
-        if (tag.hasKey("itemHandler")) {
-            itemHandlerGrinder.deserializeNBT((NBTTagCompound) tag.getTag("itemHandlerIn"));
-        }
-
-        super.readFromNBT(tag);
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> T getCapability(@Nonnull Capability<T> capability, EnumFacing facing) {
+        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+            return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(itemHandlerGrinder);
+        if (capability == CapabilityRotationalMember.ROTIONAL_MEMBER)
+            return CapabilityRotationalMember.ROTIONAL_MEMBER.cast(this);
+        return super.getCapability(capability, facing);
     }
 
     @Override

@@ -14,6 +14,7 @@ import java.util.List;
 public class CompostRecipe implements IRecipeWrapper {
     private final List<List<ItemStack>> inputs;
     private final List<ItemStack> output;
+
     public CompostRecipe(BlockInfo output, List<List<ItemStack>> inputs) {
         this.inputs = inputs;
         this.output = Collections.singletonList(output.getItemStack());
@@ -23,6 +24,21 @@ public class CompostRecipe implements IRecipeWrapper {
     public void getIngredients(@Nonnull IIngredients ingredients) {
         ingredients.setInputLists(ItemStack.class, inputs);
         ingredients.setOutput(ItemStack.class, output);
+    }
+
+    @Override
+    public void drawInfo(@Nonnull Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
+    }
+
+    @Override
+    @Nonnull
+    public List<String> getTooltipStrings(int mouseX, int mouseY) {
+        return Lists.newArrayList();
+    }
+
+    @Override
+    public boolean handleClick(@Nonnull Minecraft minecraft, int mouseX, int mouseY, int mouseButton) {
+        return false;
     }
 
     public List<List<ItemStack>> getInputs() {
@@ -42,21 +58,6 @@ public class CompostRecipe implements IRecipeWrapper {
 
     public boolean outputMatch(ItemStack stack) {
         return output.get(0).isItemEqual(stack);
-    }
-
-    @Override
-    public void drawInfo(@Nonnull Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
-    }
-
-    @Override
-    @Nonnull
-    public List<String> getTooltipStrings(int mouseX, int mouseY) {
-        return Lists.newArrayList();
-    }
-
-    @Override
-    public boolean handleClick(@Nonnull Minecraft minecraft, int mouseX, int mouseY, int mouseButton) {
-        return false;
     }
 
 }

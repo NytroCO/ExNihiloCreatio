@@ -49,8 +49,19 @@ public class FluidOnTopRecipeCategory implements IRecipeCategory<FluidOnTopRecip
     }
 
     @Override
+    public IDrawable getIcon() {
+        return null;
+    }
+
+    @Override
     public void drawExtras(@Nonnull Minecraft minecraft) {
 
+    }
+
+    @Override
+    public void setRecipe(@Nonnull IRecipeLayout recipeLayout, @Nonnull FluidOnTopRecipe recipeWrapper, @Nonnull IIngredients ingredients) {
+        // I learn from the best
+        setRecipe(recipeLayout, recipeWrapper);
     }
 
     private void setRecipe(IRecipeLayout recipeLayout, FluidOnTopRecipe recipeWrapper) {
@@ -63,16 +74,5 @@ public class FluidOnTopRecipeCategory implements IRecipeCategory<FluidOnTopRecip
         recipeLayout.getItemStacks().set(1, recipeWrapper.getInputs().get(0));
         recipeLayout.getItemStacks().set(2, recipeWrapper.getInputs().get(1));
         recipeLayout.getItemStacks().set(3, recipeWrapper.getOutputs().get(0));
-    }
-
-    @Override
-    public void setRecipe(@Nonnull IRecipeLayout recipeLayout, @Nonnull FluidOnTopRecipe recipeWrapper, @Nonnull IIngredients ingredients) {
-        // I learn from the best
-        setRecipe(recipeLayout, recipeWrapper);
-    }
-
-    @Override
-    public IDrawable getIcon() {
-        return null;
     }
 }

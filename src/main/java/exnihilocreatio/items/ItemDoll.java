@@ -96,6 +96,16 @@ public class ItemDoll extends Item implements IHasModel {
 
     @Override
     @SideOnly(Side.CLIENT)
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+        if (existingTypes.containsKey(stack.getMetadata())) {
+            tooltip.add(I18n.format(getTranslationKey(stack) + ".desc"));
+        } else {
+            tooltip.add(I18n.format("debug.mod_not_installed.desc", DollType.getByMeta(stack.getMetadata()).modid));
+        }
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
     public void getSubItems(@Nullable CreativeTabs tab, @Nonnull NonNullList<ItemStack> list) {
         if (this.isInCreativeTab(tab))
             for (DollType type : existingTypes.values()) {
@@ -117,26 +127,16 @@ public class ItemDoll extends Item implements IHasModel {
 
     }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        if (existingTypes.containsKey(stack.getMetadata())) {
-            tooltip.add(I18n.format(getTranslationKey(stack) + ".desc"));
-        } else {
-            tooltip.add(I18n.format("debug.mod_not_installed.desc", DollType.getByMeta(stack.getMetadata()).modid));
-        }
-    }
-
     public enum DollType {
         // @formatter:off
-        BLAZE(      0, "blaze",     "minecraft",        "minecraft:blaze",          "lava",         1),
-        ENDERMAN(   1, "enderman",  "minecraft",        "minecraft:enderman",       "witchwater",   2),
-        SHULKER(    2, "shulker",   "minecraft",        "minecraft:shulker",        "witchwater",   1.5),
-        GUARDIAN(   3, "guardian",  "minecraft",        "minecraft:guardian",       "water",        1),
-        BLIZZ(      4, "blizz",     "thermalfoundation","thermalfoundation:blizz",  "pyrotheum",    1),
-        BLITZ(      5, "blitz",     "thermalfoundation","thermalfoundation:blitz",  "pyrotheum",    1),
-        BASALZ(     6, "basalz",    "thermalfoundation","thermalfoundation:basalz", "pyrotheum",    1),
-        BLUESLIME(  7, "blueslime", "tconstruct",       "tconstruct:blueslime",      "milk",        2);
+        BLAZE(0, "blaze", "minecraft", "minecraft:blaze", "lava", 1),
+        ENDERMAN(1, "enderman", "minecraft", "minecraft:enderman", "witchwater", 2),
+        SHULKER(2, "shulker", "minecraft", "minecraft:shulker", "witchwater", 1.5),
+        GUARDIAN(3, "guardian", "minecraft", "minecraft:guardian", "water", 1),
+        BLIZZ(4, "blizz", "thermalfoundation", "thermalfoundation:blizz", "pyrotheum", 1),
+        BLITZ(5, "blitz", "thermalfoundation", "thermalfoundation:blitz", "pyrotheum", 1),
+        BASALZ(6, "basalz", "thermalfoundation", "thermalfoundation:basalz", "pyrotheum", 1),
+        BLUESLIME(7, "blueslime", "tconstruct", "tconstruct:blueslime", "milk", 2);
         // @formatter:on
         private static final Int2ObjectMap<DollType> ALL_TYPES = new Int2ObjectArrayMap<>();
 

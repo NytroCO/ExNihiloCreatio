@@ -29,6 +29,8 @@ import java.io.FileReader;
 import java.util.*;
 import java.util.stream.Stream;
 
+import static exnihilocreatio.registries.SieveRegistry.addToDrops;
+
 public class SieveRegistry extends BaseRegistryMap<Ingredient, List<Siftable>> implements ISieveRegistry {
 
     public SieveRegistry() {
@@ -40,7 +42,8 @@ public class SieveRegistry extends BaseRegistryMap<Ingredient, List<Siftable>> i
                         .registerTypeAdapter(ItemInfo.class, CustomItemInfoJson.INSTANCE)
                         .enableComplexMapKeySerialization()
                         .create(),
-                new com.google.gson.reflect.TypeToken<Map<Ingredient, List<Siftable>>>() {}.getType(),
+                new com.google.gson.reflect.TypeToken<Map<Ingredient, List<Siftable>>>() {
+                }.getType(),
                 ExNihiloRegistryManager.SIEVE_DEFAULT_REGISTRY_PROVIDERS
         );
     }
@@ -51,7 +54,7 @@ public class SieveRegistry extends BaseRegistryMap<Ingredient, List<Siftable>> i
             return;
         }
         if (drop instanceof ItemInfo)
-            register(CraftingHelper.getIngredient(itemStack), new Siftable((ItemInfo)drop, chance, meshLevel));
+            register(CraftingHelper.getIngredient(itemStack), new Siftable((ItemInfo) drop, chance, meshLevel));
         else
             register(CraftingHelper.getIngredient(itemStack), new Siftable(new ItemInfo(drop.getItemStack()), chance, meshLevel));
     }
@@ -78,7 +81,7 @@ public class SieveRegistry extends BaseRegistryMap<Ingredient, List<Siftable>> i
 
     public void register(String name, StackInfo drop, float chance, int meshLevel) {
         if (drop instanceof ItemInfo)
-            register(new OreIngredientStoring(name), new Siftable((ItemInfo)drop, chance, meshLevel));
+            register(new OreIngredientStoring(name), new Siftable((ItemInfo) drop, chance, meshLevel));
         else
             register(new OreIngredientStoring(name), new Siftable(new ItemInfo(drop.getItemStack()), chance, meshLevel));
     }
@@ -137,17 +140,7 @@ public class SieveRegistry extends BaseRegistryMap<Ingredient, List<Siftable>> i
 
         List<ItemStack> drops = new ArrayList<>();
 
-        getDrops(new BlockInfo(block)).forEach(siftable -> {
-            if (meshLevel == siftable.getMeshLevel()) {
-                int triesWithFortune = Math.max(random.nextInt(fortuneLevel + 2), 1);
-
-                for (int i = 0; i < triesWithFortune; i++) {
-                    if (random.nextDouble() < siftable.getChance()) {
-                        drops.add(siftable.getDrop().getItemStack());
-                    }
-                }
-            }
-        });
+        getDrops(new BlockInfo(block)).forEach(siftable -> addToDrops(random, meshLevel, fortuneLevel, drops, siftable));
 
         return drops;
     }

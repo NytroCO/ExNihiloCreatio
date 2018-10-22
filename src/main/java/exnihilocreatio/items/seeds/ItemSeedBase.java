@@ -41,11 +41,6 @@ public class ItemSeedBase extends Item implements IPlantable, IHasModel {
         Data.ITEMS.add(this);
     }
 
-    @Override
-    public CreativeTabs getCreativeTab() {
-        return ExNihiloCreatio.tabExNihilo;
-    }
-
     public ItemSeedBase setPlantType(EnumPlantType type) {
         this.type = type;
         return this;
@@ -83,6 +78,11 @@ public class ItemSeedBase extends Item implements IPlantable, IHasModel {
         }
 
         return EnumActionResult.PASS;
+    }
+
+    @Override
+    public CreativeTabs getCreativeTab() {
+        return ExNihiloCreatio.tabExNihilo;
     }
 
     @Override

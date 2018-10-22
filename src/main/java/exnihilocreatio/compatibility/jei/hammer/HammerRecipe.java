@@ -50,18 +50,6 @@ public class HammerRecipe implements IRecipeWrapper {
         ingredients.setOutputs(ItemStack.class, outputs);
     }
 
-    public List<ItemStack> getInputs() {
-        return inputs;
-    }
-
-    public List<ItemStack> getOutputs() {
-        return outputs;
-    }
-
-    public boolean isValid() {
-        return !inputs.isEmpty() && !outputs.isEmpty();
-    }
-
     @Override
     public void drawInfo(@Nonnull Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
 
@@ -76,5 +64,17 @@ public class HammerRecipe implements IRecipeWrapper {
     @Override
     public boolean handleClick(@Nonnull Minecraft minecraft, int mouseX, int mouseY, int mouseButton) {
         return false;
+    }
+
+    public List<ItemStack> getInputs() {
+        return inputs;
+    }
+
+    public List<ItemStack> getOutputs() {
+        return outputs;
+    }
+
+    public boolean isValid() {
+        return !inputs.isEmpty() && !outputs.isEmpty();
     }
 }

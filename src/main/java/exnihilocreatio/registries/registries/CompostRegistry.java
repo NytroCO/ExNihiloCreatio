@@ -144,14 +144,6 @@ public class CompostRegistry extends BaseRegistryMap<Ingredient, Compostable> im
     }
 
     @Override
-    public Map<Ingredient, Compostable> getRegistry() {
-        //noinspection unchecked
-        Map<Ingredient, Compostable> map = (HashMap) ((HashMap) registry).clone();
-        map.putAll(oreRegistry);
-        return map;
-    }
-
-    @Override
     public List<CompostRecipe> getRecipeList() {
         List<CompostRecipe> compostRecipePages = new ArrayList<>();
 
@@ -193,5 +185,13 @@ public class CompostRegistry extends BaseRegistryMap<Ingredient, Compostable> im
         });
 
         return compostRecipePages;
+    }
+
+    @Override
+    public Map<Ingredient, Compostable> getRegistry() {
+        //noinspection unchecked
+        Map<Ingredient, Compostable> map = (HashMap) ((HashMap) registry).clone();
+        map.putAll(oreRegistry);
+        return map;
     }
 }

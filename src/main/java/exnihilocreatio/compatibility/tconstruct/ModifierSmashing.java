@@ -32,6 +32,17 @@ public class ModifierSmashing extends ModifierTrait {
     }
 
     @Override
+    public void blockHarvestDrops(ItemStack tool, BlockEvent.HarvestDropsEvent event) {
+        List<ItemStack> rewards = ExNihiloRegistryManager.HAMMER_REGISTRY.getRewardDrops(event.getWorld().rand, event.getState(), ToolHelper.getHarvestLevelStat(tool), event.getFortuneLevel());
+
+        if (rewards != null && rewards.size() > 0) {
+            event.getDrops().clear();
+            event.setDropChance(1.0F);
+            event.getDrops().addAll(rewards);
+        }
+    }
+
+    @Override
     public void applyEffect(NBTTagCompound rootCompound, NBTTagCompound modifierTag) {
         super.applyEffect(rootCompound, modifierTag);
 
@@ -45,16 +56,5 @@ public class ModifierSmashing extends ModifierTrait {
         }
 
         TagUtil.setToolTag(rootCompound, data.get());
-    }
-
-    @Override
-    public void blockHarvestDrops(ItemStack tool, BlockEvent.HarvestDropsEvent event) {
-        List<ItemStack> rewards = ExNihiloRegistryManager.HAMMER_REGISTRY.getRewardDrops(event.getWorld().rand, event.getState(), ToolHelper.getHarvestLevelStat(tool), event.getFortuneLevel());
-
-        if (rewards != null && rewards.size() > 0) {
-            event.getDrops().clear();
-            event.setDropChance(1.0F);
-            event.getDrops().addAll(rewards);
-        }
     }
 }

@@ -10,7 +10,6 @@ import exnihilocreatio.compatibility.ITOPInfoProvider;
 import exnihilocreatio.config.ModConfig;
 import exnihilocreatio.tiles.TileBarrel;
 import exnihilocreatio.util.Util;
-import lombok.Getter;
 import mcjty.theoneprobe.api.IProbeHitData;
 import mcjty.theoneprobe.api.IProbeInfo;
 import mcjty.theoneprobe.api.ProbeMode;
@@ -50,9 +49,44 @@ public class BlockBarrel extends BlockBase implements ITileEntityProvider, ITOPI
     }
 
     @Override
+    public TileEntity createNewTileEntity(@Nonnull World worldIn, int meta) {
+        return new TileBarrel(this);
+    }
+
+    @Override
+    public boolean isTopSolid(IBlockState state) {
+        return false;
+    }
+
+    @Override
+    @Deprecated
+    public boolean isFullBlock(IBlockState state) {
+        return false;
+    }
+
+    @Override
+    @Deprecated
+    public boolean isFullCube(IBlockState state) {
+        return false;
+    }
+
+    @Override
+    @Nonnull
+    @Deprecated
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+        return boundingBox;
+    }
+
+    @Override
+    @Deprecated
+    public boolean isOpaqueCube(IBlockState state) {
+        return false;
+    }
+
+    @Override
     public void breakBlock(@Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull IBlockState state) {
         TileEntity te = worldIn.getTileEntity(pos);
-        if (te != null && te instanceof TileBarrel) {
+        if (te instanceof TileBarrel) {
             TileBarrel barrel = (TileBarrel) te;
 
             if (barrel.getMode() != null && barrel.getMode().getName().equals("block")) {
@@ -68,12 +102,27 @@ public class BlockBarrel extends BlockBase implements ITileEntityProvider, ITOPI
         super.breakBlock(worldIn, pos, state);
     }
 
+    @Override
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        return worldIn.isRemote || worldIn.getTileEntity(pos) == null || ((TileBarrel) worldIn.getTileEntity(pos)).onBlockActivated(worldIn, pos, state, playerIn, hand, facing, hitX, hitY, hitZ);
+
+    }
+
+    // Barrels will attempt to milk entities
+    @Override
+    public void onEntityWalk(World worldIn, BlockPos pos, Entity entityIn) {
+        TileEntity te = worldIn.getTileEntity(pos);
+        if (te instanceof TileBarrel) {
+            ((TileBarrel) te).entityOnTop(worldIn, entityIn);
+        }
+    }
+
     @SuppressWarnings("deprecation")
     @Override
     public int getLightValue(@Nonnull IBlockState state, IBlockAccess world, @Nonnull BlockPos pos) {
         TileEntity te = world.getTileEntity(pos);
 
-        if (te != null && te instanceof TileBarrel) {
+        if (te instanceof TileBarrel) {
             TileBarrel tile = (TileBarrel) te;
             if (tile.getMode() instanceof BarrelModeBlock) {
                 BarrelModeBlock mode = (BarrelModeBlock) tile.getMode();
@@ -111,47 +160,6 @@ public class BlockBarrel extends BlockBase implements ITileEntityProvider, ITOPI
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        return worldIn.isRemote || worldIn.getTileEntity(pos) == null || ((TileBarrel) worldIn.getTileEntity(pos)).onBlockActivated(worldIn, pos, state, playerIn, hand, facing, hitX, hitY, hitZ);
-
-    }
-
-    @Override
-    @Deprecated
-    public boolean isFullBlock(IBlockState state) {
-        return false;
-    }
-
-    @Override
-    @Deprecated
-    public boolean isOpaqueCube(IBlockState state) {
-        return false;
-    }
-
-    @Override
-    public TileEntity createNewTileEntity(@Nonnull World worldIn, int meta) {
-        return new TileBarrel(this);
-    }
-
-    @Override
-    @Nonnull
-    @Deprecated
-    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-        return boundingBox;
-    }
-
-    @Override
-    public boolean isTopSolid(IBlockState state) {
-        return false;
-    }
-
-    @Override
-    @Deprecated
-    public boolean isFullCube(IBlockState state) {
-        return false;
-    }
-
-    @Override
     public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, EntityPlayer player, World world,
                              IBlockState blockState, IProbeHitData data) {
         TileBarrel barrel = (TileBarrel) world.getTileEntity(data.getPos());
@@ -167,15 +175,6 @@ public class BlockBarrel extends BlockBase implements ITileEntityProvider, ITOPI
             for (String tooltip : tooltips) {
                 probeInfo.text(tooltip);
             }
-        }
-    }
-
-    // Barrels will attempt to milk entities
-    @Override
-    public void onEntityWalk(World worldIn, BlockPos pos, Entity entityIn) {
-        TileEntity te = worldIn.getTileEntity(pos);
-        if (te != null && te instanceof TileBarrel) {
-            ((TileBarrel) te).entityOnTop(worldIn, entityIn);
         }
     }
 

@@ -64,22 +64,6 @@ public class SieveRecipe implements IRecipeWrapper {
         ingredients.setOutputs(ItemStack.class, outputs);
     }
 
-    public ItemStack getMesh() {
-        return mesh;
-    }
-
-    public List getInputs() {
-        return inputs;
-    }
-
-    public List getOutputs() {
-        return outputs;
-    }
-
-    public boolean isValid() {
-        return !inputs.isEmpty() && !outputs.isEmpty();
-    }
-
     @Override
     public void drawInfo(@Nonnull Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
 
@@ -94,5 +78,21 @@ public class SieveRecipe implements IRecipeWrapper {
     @Override
     public boolean handleClick(@Nonnull Minecraft minecraft, int mouseX, int mouseY, int mouseButton) {
         return false;
+    }
+
+    public ItemStack getMesh() {
+        return mesh;
+    }
+
+    public List getInputs() {
+        return inputs;
+    }
+
+    public List getOutputs() {
+        return outputs;
+    }
+
+    public boolean isValid() {
+        return !inputs.isEmpty() && !outputs.isEmpty();
     }
 }

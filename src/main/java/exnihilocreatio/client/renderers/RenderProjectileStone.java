@@ -98,11 +98,6 @@ public class RenderProjectileStone extends Render<ProjectileStone> {
     }
 
     @Override
-    protected ResourceLocation getEntityTexture(@Nonnull ProjectileStone stone) {
-        return new ResourceLocation("minecraft:blocks/stone");
-    }
-
-    @Override
     public void doRender(@Nonnull ProjectileStone entity, double x, double y, double z, float entityYaw, float partialTicks) {
         TextureAtlasSprite texture = getTexture(Blocks.STONE.getDefaultState());
 
@@ -137,6 +132,11 @@ public class RenderProjectileStone extends Render<ProjectileStone> {
         GlStateManager.disableBlend();
         GlStateManager.enableLighting();
         GlStateManager.popMatrix();
+    }
+
+    @Override
+    protected ResourceLocation getEntityTexture(@Nonnull ProjectileStone stone) {
+        return new ResourceLocation("minecraft:blocks/stone");
     }
 
     public static class Factory implements IRenderFactory<ProjectileStone> {

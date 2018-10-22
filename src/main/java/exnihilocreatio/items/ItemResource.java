@@ -72,21 +72,6 @@ public class ItemResource extends Item implements IHasModel {
 
     @Override
     @Nonnull
-    public String getTranslationKey(ItemStack stack) {
-        return getTranslationKey() + "." + names.get(stack.getItemDamage());
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void getSubItems(@Nonnull CreativeTabs tab, @Nonnull NonNullList<ItemStack> list) {
-        if (this.isInCreativeTab(tab))
-            for (int i = 1; i < names.size(); i++) {
-                list.add(new ItemStack(this, 1, i));
-            }
-    }
-
-    @Override
-    @Nonnull
     public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         ItemStack stack = player.getHeldItem(hand);
         if (stack.getItemDamage() == names.indexOf(SILKWORM)) {
@@ -110,6 +95,21 @@ public class ItemResource extends Item implements IHasModel {
         }
 
         return EnumActionResult.PASS;
+    }
+
+    @Override
+    @Nonnull
+    public String getTranslationKey(ItemStack stack) {
+        return getTranslationKey() + "." + names.get(stack.getItemDamage());
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void getSubItems(@Nonnull CreativeTabs tab, @Nonnull NonNullList<ItemStack> list) {
+        if (this.isInCreativeTab(tab))
+            for (int i = 1; i < names.size(); i++) {
+                list.add(new ItemStack(this, 1, i));
+            }
     }
 
     @Override

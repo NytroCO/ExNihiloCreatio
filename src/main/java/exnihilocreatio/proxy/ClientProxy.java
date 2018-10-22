@@ -61,15 +61,6 @@ public class ClientProxy extends CommonProxy {
     }
 
     @Override
-    public void registerModels(ModelRegistryEvent event) {
-        ModBlocks.initModels(event);
-        ModItems.initModels(event);
-        ModFluids.initModels();
-
-        registerRenderers();
-    }
-
-    @Override
     public void preInit(FMLPreInitializationEvent event) {
         super.preInit(event);
 
@@ -89,6 +80,15 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void postInit(FMLPostInitializationEvent event) {
         super.postInit(event);
+    }
+
+    @Override
+    public void registerModels(ModelRegistryEvent event) {
+        ModBlocks.initModels(event);
+        ModItems.initModels(event);
+        ModFluids.initModels();
+
+        registerRenderers();
     }
 
     @Override

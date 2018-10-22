@@ -127,11 +127,6 @@ public class CrucibleRegistry extends BaseRegistryMap<Ingredient, Meltable> impl
     }
 
     @Override
-    public Map<Ingredient, Meltable> getRegistry() {
-        return registry;
-    }
-
-    @Override
     public List<CrucibleRecipe> getRecipeList() {
         List<CrucibleRecipe> crucibleRecipes = Lists.newLinkedList();
 
@@ -170,5 +165,10 @@ public class CrucibleRegistry extends BaseRegistryMap<Ingredient, Meltable> impl
         });
 
         return crucibleRecipes;
+    }
+
+    @Override
+    public Map<Ingredient, Meltable> getRegistry() {
+        return registry;
     }
 }

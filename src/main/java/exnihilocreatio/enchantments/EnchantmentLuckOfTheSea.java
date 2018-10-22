@@ -17,9 +17,12 @@ public class EnchantmentLuckOfTheSea extends Enchantment {
         Data.ENCHANTMENTS.add(this);
     }
 
+    /**
+     * Returns the maximum level that the enchantment can have.
+     */
     @Override
-    public boolean canApplyAtEnchantingTable(ItemStack stack) {
-        return stack.getItem() instanceof ItemMesh;
+    public int getMaxLevel() {
+        return 3;
     }
 
     /**
@@ -38,11 +41,8 @@ public class EnchantmentLuckOfTheSea extends Enchantment {
         return super.getMinEnchantability(enchantmentLevel) + 50;
     }
 
-    /**
-     * Returns the maximum level that the enchantment can have.
-     */
     @Override
-    public int getMaxLevel() {
-        return 3;
+    public boolean canApplyAtEnchantingTable(ItemStack stack) {
+        return stack.getItem() instanceof ItemMesh;
     }
 }

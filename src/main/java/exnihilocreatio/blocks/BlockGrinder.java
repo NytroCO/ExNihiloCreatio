@@ -41,10 +41,10 @@ public class BlockGrinder extends BlockBase implements ITileEntityProvider {
         return new TileGrinder();
     }
 
+    //region >>>> RENDERING OPTIONS
     @Override
-    @Nonnull
-    protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, PART_TYPE);
+    public boolean isFullBlock(IBlockState state) {
+        return false;
     }
 
     @Override
@@ -58,9 +58,8 @@ public class BlockGrinder extends BlockBase implements ITileEntityProvider {
         return 0;
     }
 
-    //region >>>> RENDERING OPTIONS
     @Override
-    public boolean isFullBlock(IBlockState state) {
+    public boolean isBlockNormalCube(IBlockState state) {
         return false;
     }
 
@@ -74,19 +73,8 @@ public class BlockGrinder extends BlockBase implements ITileEntityProvider {
         return false;
     }
 
-    @SideOnly(Side.CLIENT)
-    @Nonnull
-    public BlockRenderLayer getBlockLayer() {
-        return BlockRenderLayer.CUTOUT;
-    }
-
     @Override
     public boolean shouldSideBeRendered(IBlockState blockState, @Nonnull IBlockAccess blockAccess, @Nonnull BlockPos pos, EnumFacing side) {
-        return false;
-    }
-
-    @Override
-    public boolean isBlockNormalCube(IBlockState state) {
         return false;
     }
 
@@ -94,15 +82,27 @@ public class BlockGrinder extends BlockBase implements ITileEntityProvider {
     public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
-    //endregion
-
-    private TileGrinder getTe(World world, BlockPos pos) {
-        return (TileGrinder) world.getTileEntity(pos);
-    }
 
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         TileGrinder te = getTe(worldIn, pos);
         te.facing = placer.getHorizontalFacing();
+    }
+
+    @Override
+    @Nonnull
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, PART_TYPE);
+    }
+    //endregion
+
+    @SideOnly(Side.CLIENT)
+    @Nonnull
+    public BlockRenderLayer getBlockLayer() {
+        return BlockRenderLayer.CUTOUT;
+    }
+
+    private TileGrinder getTe(World world, BlockPos pos) {
+        return (TileGrinder) world.getTileEntity(pos);
     }
 }

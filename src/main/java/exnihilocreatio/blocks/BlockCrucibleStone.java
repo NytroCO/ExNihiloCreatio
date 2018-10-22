@@ -32,25 +32,6 @@ public class BlockCrucibleStone extends BlockCrucibleBase implements IHasSpecial
     }
 
     @Override
-    public TileEntity createTileEntity(@Nonnull World worldIn, @Nonnull IBlockState state) {
-        if (state.getValue(FIRED))
-            return new TileCrucibleStone();
-
-        return null;
-    }
-
-    @Override
-    public boolean hasTileEntity(IBlockState state) {
-        return state.getValue(FIRED);
-    }
-
-    @Override
-    @Nonnull
-    public BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, FIRED, THIN);
-    }
-
-    @Override
     @Nonnull
     @Deprecated
     public IBlockState getStateFromMeta(int meta) {
@@ -63,16 +44,35 @@ public class BlockCrucibleStone extends BlockCrucibleBase implements IHasSpecial
     }
 
     @Override
-    public int damageDropped(IBlockState state) {
-        return getMetaFromState(state);
-    }
-
-    @Override
     public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items) {
         if (itemIn == getCreativeTab()) {
             items.add(new ItemStack(this, 1, 0));
             items.add(new ItemStack(this, 1, 1));
         }
+    }
+
+    @Override
+    @Nonnull
+    public BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, FIRED, THIN);
+    }
+
+    @Override
+    public boolean hasTileEntity(IBlockState state) {
+        return state.getValue(FIRED);
+    }
+
+    @Override
+    public int damageDropped(IBlockState state) {
+        return getMetaFromState(state);
+    }
+
+    @Override
+    public TileEntity createTileEntity(@Nonnull World worldIn, @Nonnull IBlockState state) {
+        if (state.getValue(FIRED))
+            return new TileCrucibleStone();
+
+        return null;
     }
 
     @Override

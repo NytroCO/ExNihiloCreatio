@@ -18,19 +18,4 @@ import stanhebben.zenscript.annotations.ZenMethod
 @ZenRegister
 object Ore {
 
-    @ZenMethod
-    @JvmStatic
-    fun removeAll() = ExNihiloRegistryManager.ORE_REGISTRY.clearRegistry()
-
-    @ZenMethod
-    @JvmStatic
-    fun addRecipe(name: String,
-                  color: String,
-                  @Optional ingot: IItemStack? = null,
-                  @Optional translation: Map<String, String>? = null,
-                  @Optional oredict: String? = null) {
-
-        CraftTweakerAPI.logInfo("Adding Ore for $name with color $color")
-        ExNihiloRegistryManager.ORE_REGISTRY.register(name, Color(color), if (ingot == null) null else ItemInfo(ingot.internal as ItemStack), translation, oredict)
-    }
 }

@@ -18,14 +18,12 @@ import static net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
 
 @ObjectHolder("thermalfoundation")
 public class ThermalFoundation implements IRecipeDefaults {
-    @Getter
-    public String MODID = "thermalfoundation";
-
     @ObjectHolder("material")
     public static final Item THERMAL_MATERIAL = null;
-
     @ObjectHolder("fluid_pyrotheum")
     public static final Block MOTLEN_PYROTHEUM = null;
+    @Getter
+    public String MODID = "thermalfoundation";
 
     public void registerSieve(SieveRegistry registry) {
         OreRegistry oreRegistry = ExNihiloRegistryManager.ORE_REGISTRY;
@@ -41,11 +39,6 @@ public class ThermalFoundation implements IRecipeDefaults {
     @Override
     public void registerHeat(HeatRegistry registry) {
         registry.register(new BlockInfo(MOTLEN_PYROTHEUM, -1), 15);
-    }
-
-    @Override
-    public void registerFluidTransform(FluidTransformRegistry registry) {
-
     }
 
     public void registerOreChunks(OreRegistry registry) {
@@ -69,10 +62,15 @@ public class ThermalFoundation implements IRecipeDefaults {
             if (!registry.isRegistered("nickel"))
                 registry.register("nickel", new Color("BDBAAE"), new ItemInfo(THERMAL_MATERIAL, 133));
 
-            if (!registry.isRegistered("platinum")){
+            if (!registry.isRegistered("platinum")) {
                 registry.register("platinum", new Color("d7dfe7"), new ItemInfo(THERMAL_MATERIAL, 134));
                 registry.getSieveBlackList().add(registry.getOreItem("platinum"));
             }
         }
+    }
+
+    @Override
+    public void registerFluidTransform(FluidTransformRegistry registry) {
+
     }
 }

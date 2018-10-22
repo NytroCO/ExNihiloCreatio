@@ -68,18 +68,6 @@ public class BarrelModeFluid implements IBarrelMode {
     }
 
     @Override
-    public List<String> getWailaTooltip(TileBarrel barrel, List<String> currenttip) {
-        if (barrel.getTank().getFluid() != null) {
-            currenttip.add(barrel.getTank().getFluid().getLocalizedName());
-            currenttip.add("Amount: " + barrel.getTank().getFluidAmount() + "mb");
-        } else {
-            currenttip.add("Empty");
-        }
-
-        return currenttip;
-    }
-
-    @Override
     public void onBlockActivated(World world, TileBarrel barrel, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         ItemStack stack = player.getHeldItem(hand);
 
@@ -211,6 +199,18 @@ public class BarrelModeFluid implements IBarrelMode {
     @Override
     public boolean canFillWithFluid(TileBarrel barrel) {
         return true;
+    }
+
+    @Override
+    public List<String> getWailaTooltip(TileBarrel barrel, List<String> currenttip) {
+        if (barrel.getTank().getFluid() != null) {
+            currenttip.add(barrel.getTank().getFluid().getLocalizedName());
+            currenttip.add("Amount: " + barrel.getTank().getFluidAmount() + "mb");
+        } else {
+            currenttip.add("Empty");
+        }
+
+        return currenttip;
     }
 
 }

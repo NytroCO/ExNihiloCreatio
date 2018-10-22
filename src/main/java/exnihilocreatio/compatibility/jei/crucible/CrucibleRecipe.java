@@ -27,21 +27,6 @@ public class CrucibleRecipe implements IRecipeWrapper {
         ingredients.setOutput(ItemStack.class, output);
     }
 
-    public List<ItemStack> getInputs() {
-        return inputs;
-    }
-
-    public ItemStack getFluid() {
-        return output;
-    }
-
-    /**
-     * @return Returns full if the input has any space free
-     */
-    public boolean isNonFull() {
-        return inputs.size() < 45;
-    }
-
     @Override
     public void drawInfo(@Nonnull Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
     }
@@ -55,6 +40,21 @@ public class CrucibleRecipe implements IRecipeWrapper {
     @Override
     public boolean handleClick(@Nonnull Minecraft minecraft, int mouseX, int mouseY, int mouseButton) {
         return false;
+    }
+
+    public List<ItemStack> getInputs() {
+        return inputs;
+    }
+
+    public ItemStack getFluid() {
+        return output;
+    }
+
+    /**
+     * @return Returns full if the input has any space free
+     */
+    public boolean isNonFull() {
+        return inputs.size() < 45;
     }
 
 }

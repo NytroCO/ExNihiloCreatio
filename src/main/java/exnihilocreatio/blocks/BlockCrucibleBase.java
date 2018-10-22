@@ -43,17 +43,26 @@ public abstract class BlockCrucibleBase extends Block implements ITOPInfoProvide
     }
 
     @Override
-    public abstract TileEntity createTileEntity(@Nonnull World worldIn, @Nonnull IBlockState state);
+    @Deprecated
+    public boolean isFullBlock(IBlockState state) {
+        return false;
+    }
+
+    @Override
+    @Deprecated
+    public boolean isFullCube(IBlockState state) {
+        return false;
+    }
+
+    @Override
+    @Deprecated
+    public boolean isOpaqueCube(IBlockState state) {
+        return false;
+    }
 
     @Override
     public int damageDropped(IBlockState state) {
         return getMetaFromState(state);
-    }
-
-    @Override
-    @Nonnull
-    public ItemStack getPickBlock(@Nonnull IBlockState state, RayTraceResult target, @Nonnull World world, @Nonnull BlockPos pos, EntityPlayer player) {
-        return new ItemStack(Item.getItemFromBlock(this), 1, this.getMetaFromState(world.getBlockState(pos)));
     }
 
     @Override
@@ -72,21 +81,12 @@ public abstract class BlockCrucibleBase extends Block implements ITOPInfoProvide
     }
 
     @Override
-    @Deprecated
-    public boolean isFullBlock(IBlockState state) {
-        return false;
-    }
+    public abstract TileEntity createTileEntity(@Nonnull World worldIn, @Nonnull IBlockState state);
 
     @Override
-    @Deprecated
-    public boolean isOpaqueCube(IBlockState state) {
-        return false;
-    }
-
-    @Override
-    @Deprecated
-    public boolean isFullCube(IBlockState state) {
-        return false;
+    @Nonnull
+    public ItemStack getPickBlock(@Nonnull IBlockState state, RayTraceResult target, @Nonnull World world, @Nonnull BlockPos pos, EntityPlayer player) {
+        return new ItemStack(Item.getItemFromBlock(this), 1, this.getMetaFromState(world.getBlockState(pos)));
     }
 
     @Override

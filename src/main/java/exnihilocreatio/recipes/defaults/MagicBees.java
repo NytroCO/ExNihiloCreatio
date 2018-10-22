@@ -25,6 +25,7 @@ public class MagicBees implements IRecipeDefaults {
         registry.register(new ItemInfo("magicbees:propolis:5"), 0.125f, new BlockInfo(Blocks.SLIME_BLOCK), new Color("7B934B"));
         registry.register(new ItemInfo("magicbees:propolis:6"), 0.125f, new BlockInfo(Blocks.SLIME_BLOCK), new Color("7B934B"));
     }
+
     @Override
     public void registerSieve(SieveRegistry registry) {
         /*

@@ -26,9 +26,8 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- *
  * This is a clone of the JEI color thief magic to prevent a hard dependency on the mod
- *
+ * <p>
  * Check the original source for more changes:
  * https://github.com/mezz/JustEnoughItems/blob/a339af3fceb142be5398ef856f81e3c89413349e/src/main/java/mezz/jei/color/ColorGetter.java
  *
@@ -36,11 +35,11 @@ import java.util.List;
  */
 public final class ColorGetter {
 
+    public static final HashMap<ItemInfo, exnihilocreatio.texturing.Color> colorCache = new HashMap<>();
+
     private ColorGetter() {
 
     }
-
-    public static final HashMap<ItemInfo, exnihilocreatio.texturing.Color> colorCache = new HashMap<>();
 
     public static exnihilocreatio.texturing.Color getColor(ItemStack stack) {
         if (stack.isEmpty()) return exnihilocreatio.texturing.Color.INVALID_COLOR;

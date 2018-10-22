@@ -27,13 +27,13 @@ public class FluidBlockTransformerRegistry extends BaseRegistryList<FluidBlockTr
         super(
                 new GsonBuilder()
                         .setPrettyPrinting()
-                        .registerTypeAdapter(ItemInfo.class,  CustomItemInfoJson.INSTANCE)
-                        .registerTypeAdapter(StackInfo.class,  CustomItemInfoJson.INSTANCE)
-                        .registerTypeAdapter(BlockInfo.class,  CustomBlockInfoJson.INSTANCE)
-                        .registerTypeAdapter(Ingredient.class,  CustomIngredientJson.INSTANCE)
-                        .registerTypeAdapter(OreIngredientStoring.class,  CustomIngredientJson.INSTANCE)
-                        .registerTypeAdapter(EntityInfo.class,  CustomEntityInfoJson.INSTANCE)
-                        .registerTypeAdapter(FluidBlockTransformer.class,  CustomFluidBlockTransformerJson.INSTANCE)
+                        .registerTypeAdapter(ItemInfo.class, CustomItemInfoJson.INSTANCE)
+                        .registerTypeAdapter(StackInfo.class, CustomItemInfoJson.INSTANCE)
+                        .registerTypeAdapter(BlockInfo.class, CustomBlockInfoJson.INSTANCE)
+                        .registerTypeAdapter(Ingredient.class, CustomIngredientJson.INSTANCE)
+                        .registerTypeAdapter(OreIngredientStoring.class, CustomIngredientJson.INSTANCE)
+                        .registerTypeAdapter(EntityInfo.class, CustomEntityInfoJson.INSTANCE)
+                        .registerTypeAdapter(FluidBlockTransformer.class, CustomFluidBlockTransformerJson.INSTANCE)
                         .create(),
                 ExNihiloRegistryManager.FLUID_BLOCK_DEFAULT_REGISTRY_PROVIDERS
         );
@@ -44,7 +44,7 @@ public class FluidBlockTransformerRegistry extends BaseRegistryList<FluidBlockTr
     }
 
     public void register(Fluid fluid, StackInfo inputBlock, StackInfo outputBlock, String entityName) {
-        if (fluid == null){
+        if (fluid == null) {
             LogUtil.error("Fluid is null, this may not happen!");
             for (StackTraceElement stackTraceElement : Thread.currentThread().getStackTrace()) {
                 LogUtil.warn(stackTraceElement);
@@ -55,10 +55,6 @@ public class FluidBlockTransformerRegistry extends BaseRegistryList<FluidBlockTr
 
 
         register(fluid.getName(), Ingredient.fromStacks(inputBlock.getItemStack()), outputBlock, entityName, entityName == null ? 0 : 4, entityName == null ? 0 : 4);
-    }
-
-    public void register(Fluid fluid, String oredict, StackInfo outputBlock) {
-        register(fluid, oredict, outputBlock, null);
     }
 
     public void register(Fluid fluid, String oredict, StackInfo outputBlock, String entityName) {
@@ -75,7 +71,6 @@ public class FluidBlockTransformerRegistry extends BaseRegistryList<FluidBlockTr
             LogUtil.error("Item " + outputBlock.toString() + "  has no block version!");
         }
     }
-
 
     public boolean canBlockBeTransformedWithThisFluid(Fluid fluid, ItemStack stack) {
         for (FluidBlockTransformer transformer : registry) {
@@ -135,6 +130,10 @@ public class FluidBlockTransformerRegistry extends BaseRegistryList<FluidBlockTr
         }
 
         return null;
+    }
+
+    public void register(Fluid fluid, String oredict, StackInfo outputBlock) {
+        register(fluid, oredict, outputBlock, null);
     }
 
     @Override

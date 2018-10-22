@@ -47,6 +47,22 @@ public class FluidTransformRecipe implements IRecipeWrapper {
         ingredients.setOutput(FluidStack.class, outputFluid);
     }
 
+    @Override
+    public void drawInfo(@Nonnull Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
+
+    }
+
+    @Override
+    @Nonnull
+    public List<String> getTooltipStrings(int mouseX, int mouseY) {
+        return Lists.newArrayList();
+    }
+
+    @Override
+    public boolean handleClick(@Nonnull Minecraft minecraft, int mouseX, int mouseY, int mouseButton) {
+        return false;
+    }
+
     public List<ItemStack> getInputs() {
         return inputStacks;
     }
@@ -65,21 +81,5 @@ public class FluidTransformRecipe implements IRecipeWrapper {
 
     public boolean isValid() {
         return !inputStacks.isEmpty() && !outputBucket.isEmpty();
-    }
-
-    @Override
-    public void drawInfo(@Nonnull Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
-
-    }
-
-    @Override
-    @Nonnull
-    public List<String> getTooltipStrings(int mouseX, int mouseY) {
-        return Lists.newArrayList();
-    }
-
-    @Override
-    public boolean handleClick(@Nonnull Minecraft minecraft, int mouseX, int mouseY, int mouseButton) {
-        return false;
     }
 }

@@ -150,58 +150,6 @@ public class BlockInfestingLeaves extends BlockLeaves implements ITileEntityProv
     }
 
     @Override
-    public void randomTick(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull IBlockState state, @Nonnull Random rand) {
-        this.updateTick(world, pos, state, rand);
-        spread(world, pos, state, rand);
-    }
-
-    @Override
-    public int tickRate(World worldIn) {
-        return ModConfig.infested_leaves.leavesUpdateFrequency;
-    }
-
-    @Override
-    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
-        if (!worldIn.isRemote && Util.isLeaves(worldIn.getBlockState(fromPos)))
-            worldIn.setBlockState(pos, state.withProperty(NEARBYLEAVES, true), 7);
-        super.neighborChanged(state, worldIn, pos, blockIn, fromPos);
-    }
-
-    @Override
-    @Nonnull
-    @Deprecated
-    public EnumBlockRenderType getRenderType(IBlockState state) {
-        return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
-    }
-
-    @Override
-    @Nonnull
-    public IBlockState getExtendedState(@Nonnull IBlockState state, IBlockAccess world, BlockPos pos) {
-        if (state instanceof IExtendedBlockState) {
-            IExtendedBlockState retval = (IExtendedBlockState) state;
-            IBlockState leafState;
-            TileEntity te = world.getTileEntity(pos);
-
-            if (te instanceof ITileLeafBlock) {
-                leafState = ((ITileLeafBlock) te).getLeafBlock();
-            } else {
-                leafState = Blocks.LEAVES.getDefaultState();
-            }
-
-            return retval.withProperty(LEAFBLOCK, leafState);
-        }
-        return state;
-    }
-
-    @Override
-    @Nonnull
-    protected BlockStateContainer createBlockState() {
-        IProperty<?>[] listedProperties = {CHECK_DECAY, DECAYABLE, NEARBYLEAVES};
-        IUnlistedProperty<?>[] unlistedProperties = {LEAFBLOCK};
-        return new ExtendedBlockState(this, listedProperties, unlistedProperties);
-    }
-
-    @Override
     @Nonnull
     @Deprecated
     public IBlockState getStateFromMeta(int meta) {
@@ -226,27 +174,27 @@ public class BlockInfestingLeaves extends BlockLeaves implements ITileEntityProv
 
     @Override
     @Nonnull
-    public List<ItemStack> getDrops(@Nonnull IBlockAccess world, @Nonnull BlockPos pos, @Nonnull IBlockState state, int fortune) {
-        return new ArrayList<>();
+    @Deprecated
+    public EnumBlockRenderType getRenderType(IBlockState state) {
+        return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
     }
 
     @Override
-    @Nonnull
-    public List<ItemStack> onSheared(@Nonnull ItemStack item, IBlockAccess world, BlockPos pos, int fortune) {
-        ArrayList<ItemStack> ret = new ArrayList<>();
-        ret.add(new ItemStack(this));
-        return ret;
+    public void randomTick(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull IBlockState state, @Nonnull Random rand) {
+        this.updateTick(world, pos, state, rand);
+        spread(world, pos, state, rand);
     }
 
     @Override
-    @Nonnull
-    public EnumType getWoodType(int meta) {
-        return EnumType.OAK;
+    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
+        if (!worldIn.isRemote && Util.isLeaves(worldIn.getBlockState(fromPos)))
+            worldIn.setBlockState(pos, state.withProperty(NEARBYLEAVES, true), 7);
+        super.neighborChanged(state, worldIn, pos, blockIn, fromPos);
     }
 
     @Override
-    public TileEntity createNewTileEntity(@Nonnull World worldIn, int meta) {
-        return new TileInfestingLeaves();
+    public int tickRate(World worldIn) {
+        return ModConfig.infested_leaves.leavesUpdateFrequency;
     }
 
     @Override
@@ -272,6 +220,58 @@ public class BlockInfestingLeaves extends BlockLeaves implements ITileEntityProv
                 world.removeTileEntity(pos);
             }
         }
+    }
+
+    @Override
+    @Nonnull
+    protected BlockStateContainer createBlockState() {
+        IProperty<?>[] listedProperties = {CHECK_DECAY, DECAYABLE, NEARBYLEAVES};
+        IUnlistedProperty<?>[] unlistedProperties = {LEAFBLOCK};
+        return new ExtendedBlockState(this, listedProperties, unlistedProperties);
+    }
+
+    @Override
+    @Nonnull
+    public List<ItemStack> getDrops(@Nonnull IBlockAccess world, @Nonnull BlockPos pos, @Nonnull IBlockState state, int fortune) {
+        return new ArrayList<>();
+    }
+
+    @Override
+    @Nonnull
+    public IBlockState getExtendedState(@Nonnull IBlockState state, IBlockAccess world, BlockPos pos) {
+        if (state instanceof IExtendedBlockState) {
+            IExtendedBlockState retval = (IExtendedBlockState) state;
+            IBlockState leafState;
+            TileEntity te = world.getTileEntity(pos);
+
+            if (te instanceof ITileLeafBlock) {
+                leafState = ((ITileLeafBlock) te).getLeafBlock();
+            } else {
+                leafState = Blocks.LEAVES.getDefaultState();
+            }
+
+            return retval.withProperty(LEAFBLOCK, leafState);
+        }
+        return state;
+    }
+
+    @Override
+    @Nonnull
+    public List<ItemStack> onSheared(@Nonnull ItemStack item, IBlockAccess world, BlockPos pos, int fortune) {
+        ArrayList<ItemStack> ret = new ArrayList<>();
+        ret.add(new ItemStack(this));
+        return ret;
+    }
+
+    @Override
+    @Nonnull
+    public EnumType getWoodType(int meta) {
+        return EnumType.OAK;
+    }
+
+    @Override
+    public TileEntity createNewTileEntity(@Nonnull World worldIn, int meta) {
+        return new TileInfestingLeaves();
     }
 
     @Override

@@ -38,21 +38,21 @@ public class MessageFluidUpdate implements IMessage {
     }
 
     @Override
-    public void toBytes(ByteBuf buf) {
-        buf.writeInt(x);
-        buf.writeInt(y);
-        buf.writeInt(z);
-        buf.writeInt(fillAmount);
-        ByteBufUtils.writeUTF8String(buf, fluidName);
-    }
-
-    @Override
     public void fromBytes(ByteBuf buf) {
         this.x = buf.readInt();
         this.y = buf.readInt();
         this.z = buf.readInt();
         this.fillAmount = buf.readInt();
         this.fluidName = ByteBufUtils.readUTF8String(buf);
+    }
+
+    @Override
+    public void toBytes(ByteBuf buf) {
+        buf.writeInt(x);
+        buf.writeInt(y);
+        buf.writeInt(z);
+        buf.writeInt(fillAmount);
+        ByteBufUtils.writeUTF8String(buf, fluidName);
     }
 
     public static class MessageFluidUpdateHandler implements IMessageHandler<MessageFluidUpdate, IMessage> {

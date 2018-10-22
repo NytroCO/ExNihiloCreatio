@@ -24,7 +24,7 @@ public class CrookBase extends ItemTool implements ICrook, IHasModel {
         this.setCreativeTab(ExNihiloCreatio.tabExNihilo);
         this.setHarvestLevel("crook", miningLevel);
 
-        if(!ModConfig.crooking.disableCrookCrafting)
+        if (!ModConfig.crooking.disableCrookCrafting)
             Data.ITEMS.add(this);
     }
 

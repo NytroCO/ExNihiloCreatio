@@ -67,6 +67,11 @@ public class HammerRecipeCategory implements IRecipeCategory<HammerRecipe> {
     }
 
     @Override
+    public IDrawable getIcon() {
+        return null;
+    }
+
+    @Override
     public void drawExtras(@Nonnull Minecraft minecraft) {
         if (hasHighlight) {
             slotHighlight.draw(minecraft, highlightX, highlightY);
@@ -106,11 +111,6 @@ public class HammerRecipeCategory implements IRecipeCategory<HammerRecipe> {
 
 
         recipeLayout.getItemStacks().addTooltipCallback(new HammerTooltipCallback(recipeWrapper));
-    }
-
-    @Override
-    public IDrawable getIcon() {
-        return null;
     }
 
     private static class HammerTooltipCallback implements ITooltipCallback<ItemStack> {

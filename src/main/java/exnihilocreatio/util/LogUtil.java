@@ -14,11 +14,12 @@ import java.util.Date;
 
 public class LogUtil {
     private static final Logger logger = LogManager.getLogger("Ex Nihilo Creatio");
+    private static File logFile;
+    private static PrintWriter logWriter;
+
     static {
         LogManager.getFormatterLogger();
     }
-    private static File logFile;
-    private static PrintWriter logWriter;
 
     public static void log(Level level, Object object) {
         String message = object == null ? "null" : object.toString();

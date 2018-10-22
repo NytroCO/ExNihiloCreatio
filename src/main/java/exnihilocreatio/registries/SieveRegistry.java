@@ -73,18 +73,22 @@ public class SieveRegistry {
         List<ItemStack> drops = Lists.newArrayList();
 
         for (Siftable siftable : siftables) {
-            if (meshLevel == siftable.getMeshLevel()) {
-                int triesWithFortune = Math.max(random.nextInt(fortuneLevel + 2), 1);
-
-                for (int i = 0; i < triesWithFortune; i++) {
-                    if (random.nextDouble() < siftable.getChance()) {
-                        drops.add(siftable.getDrop().getItemStack());
-                    }
-                }
-            }
+            addToDrops(random, meshLevel, fortuneLevel, drops, siftable);
         }
 
         return drops;
+    }
+
+    public static void addToDrops(Random random, int meshLevel, int fortuneLevel, List<ItemStack> drops, Siftable siftable) {
+        if (meshLevel == siftable.getMeshLevel()) {
+            int triesWithFortune = Math.max(random.nextInt(fortuneLevel + 2), 1);
+
+            for (int i = 0; i < triesWithFortune; i++) {
+                if (random.nextDouble() < siftable.getChance()) {
+                    drops.add(siftable.getDrop().getItemStack());
+                }
+            }
+        }
     }
 
     public static boolean canBeSifted(ItemStack stack) {

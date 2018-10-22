@@ -59,6 +59,11 @@ public class CompostRecipeCategory implements IRecipeCategory<CompostRecipe> {
     }
 
     @Override
+    public IDrawable getIcon() {
+        return null;
+    }
+
+    @Override
     public void drawExtras(@Nonnull Minecraft minecraft) {
         if (hasHighlight) {
             slotHighlight.draw(minecraft, highlightX, highlightY);
@@ -106,11 +111,6 @@ public class CompostRecipeCategory implements IRecipeCategory<CompostRecipe> {
 
         layout.getItemStacks().addTooltipCallback(new CompostTooltipCallback());
 
-    }
-
-    @Override
-    public IDrawable getIcon() {
-        return null;
     }
 
     private static class CompostTooltipCallback implements ITooltipCallback<ItemStack> {

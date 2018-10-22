@@ -187,11 +187,6 @@ public class ItemInfo implements StackInfo {
 
     //StackInfo
 
-    @Override
-    public String toString() {
-        return ForgeRegistries.ITEMS.getKey(item) + (meta == 0 ? "" : (":" + meta));
-    }
-
     @Nonnull
     @Override
     public ItemStack getItemStack() {
@@ -215,6 +210,11 @@ public class ItemInfo implements StackInfo {
         return Block.getBlockFromItem(item);
     }
 
+    @Override
+    public int getMeta() {
+        return isWildcard ? -1 : meta;
+    }
+
     @Nonnull
     @Override
     public IBlockState getBlockState() {
@@ -228,8 +228,8 @@ public class ItemInfo implements StackInfo {
     }
 
     @Override
-    public int getMeta() {
-        return isWildcard ? -1 : meta;
+    public boolean isValid() {
+        return this.item != Items.AIR && meta <= OreDictionary.WILDCARD_VALUE;
     }
 
     @Override
@@ -241,11 +241,6 @@ public class ItemInfo implements StackInfo {
             tag.setTag("nbt", this.nbt);
         }
         return tag;
-    }
-
-    @Override
-    public boolean isValid() {
-        return this.item != Items.AIR && meta <= OreDictionary.WILDCARD_VALUE;
     }
 
     @Override
@@ -285,6 +280,11 @@ public class ItemInfo implements StackInfo {
             }
         }
         return false;
+    }
+
+    @Override
+    public String toString() {
+        return ForgeRegistries.ITEMS.getKey(item) + (meta == 0 ? "" : (":" + meta));
     }
 
     @Nonnull

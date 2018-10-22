@@ -23,21 +23,6 @@ public class BarrelItemHandler extends ItemStackHandler {
     }
 
     @Override
-    protected int getStackLimit(int slot, @Nonnull ItemStack stack) {
-        return 1;
-    }
-
-    @Override
-    @Nonnull
-    public ItemStack getStackInSlot(int slot) {
-        if (barrel.getMode() != null && barrel.getMode().getHandler(barrel) != null) {
-            return barrel.getMode().getHandler(barrel).getStackInSlot(slot);
-        }
-
-        return ItemStack.EMPTY;
-    }
-
-    @Override
     public void setStackInSlot(int slot, @Nonnull ItemStack stack) {
         if (barrel.getMode() != null && barrel.getMode().isTriggerItemStack(stack)) {
             barrel.getMode().addItem(stack, barrel);
@@ -53,14 +38,7 @@ public class BarrelItemHandler extends ItemStackHandler {
             if (modes != null) {
                 for (IBarrelMode possibleMode : modes) {
                     if (possibleMode.isTriggerItemStack(stack)) {
-                        barrel.setMode(possibleMode.getName());
-                        PacketHandler.sendToAllAround(new MessageBarrelModeUpdate(barrel.getMode().getName(), barrel.getPos()), barrel);
-
-                        barrel.getMode().addItem(stack, barrel);
-                        barrel.markDirty();
-
-                        IBlockState state = barrel.getWorld().getBlockState(barrel.getPos());
-                        barrel.getWorld().setBlockState(barrel.getPos(), state);
+                        simulate(possibleMode, stack);
                     }
                 }
             }
@@ -69,9 +47,9 @@ public class BarrelItemHandler extends ItemStackHandler {
 
     @Override
     @Nonnull
-    public ItemStack extractItem(int slot, int amount, boolean simulate) {
+    public ItemStack getStackInSlot(int slot) {
         if (barrel.getMode() != null && barrel.getMode().getHandler(barrel) != null) {
-            return barrel.getMode().getHandler(barrel).extractItem(slot, amount, simulate);
+            return barrel.getMode().getHandler(barrel).getStackInSlot(slot);
         }
 
         return ItemStack.EMPTY;
@@ -90,12 +68,7 @@ public class BarrelItemHandler extends ItemStackHandler {
             for (IBarrelMode possibleMode : modes) {
                 if (possibleMode.isTriggerItemStack(stack)) {
                     if (!simulate) {
-                        barrel.setMode(possibleMode.getName());
-                        PacketHandler.sendToAllAround(new MessageBarrelModeUpdate(barrel.getMode().getName(), barrel.getPos()), barrel);
-                        barrel.getMode().addItem(stack, barrel);
-                        barrel.markDirty();
-                        IBlockState state = barrel.getWorld().getBlockState(barrel.getPos());
-                        barrel.getWorld().setBlockState(barrel.getPos(), state);
+                        simulate(possibleMode, stack);
                     }
 
                     ItemStack ret = stack.copy();
@@ -111,6 +84,30 @@ public class BarrelItemHandler extends ItemStackHandler {
         }
 
         return stack;
+    }
+
+    @Override
+    @Nonnull
+    public ItemStack extractItem(int slot, int amount, boolean simulate) {
+        if (barrel.getMode() != null && barrel.getMode().getHandler(barrel) != null) {
+            return barrel.getMode().getHandler(barrel).extractItem(slot, amount, simulate);
+        }
+
+        return ItemStack.EMPTY;
+    }
+
+    @Override
+    protected int getStackLimit(int slot, @Nonnull ItemStack stack) {
+        return 1;
+    }
+
+    private void simulate(IBarrelMode possibleMode, ItemStack stack) {
+        barrel.setMode(possibleMode.getName());
+        PacketHandler.sendToAllAround(new MessageBarrelModeUpdate(barrel.getMode().getName(), barrel.getPos()), barrel);
+        barrel.getMode().addItem(stack, barrel);
+        barrel.markDirty();
+        IBlockState state = barrel.getWorld().getBlockState(barrel.getPos());
+        barrel.getWorld().setBlockState(barrel.getPos(), state);
     }
 
 }

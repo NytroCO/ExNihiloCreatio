@@ -29,7 +29,8 @@ public class FluidTransformRegistry extends BaseRegistryMap<String, List<FluidTr
                         .registerTypeAdapter(ItemInfo.class, CustomItemInfoJson.INSTANCE)
                         .registerTypeAdapter(BlockInfo.class, CustomBlockInfoJson.INSTANCE)
                         .create(),
-                new com.google.gson.reflect.TypeToken<Map<String, List<FluidTransformer>>>() {}.getType(),
+                new com.google.gson.reflect.TypeToken<Map<String, List<FluidTransformer>>>() {
+                }.getType(),
                 ExNihiloRegistryManager.FLUID_TRANSFORM_DEFAULT_REGISTRY_PROVIDERS);
     }
 
@@ -66,16 +67,6 @@ public class FluidTransformRegistry extends BaseRegistryMap<String, List<FluidTr
         return registry.get(inputFluid);
     }
 
-    @Override
-    protected void registerEntriesFromJSON(FileReader fr) {
-        List<FluidTransformer> gsonInput = gson.fromJson(fr, new TypeToken<List<FluidTransformer>>() {
-        }.getType());
-
-        for (FluidTransformer transformer : gsonInput) {
-            register(transformer);
-        }
-    }
-
     /**
      * Overridden as I don't want the registry to get saved directly,
      * rather a List that equals the contents of the registry
@@ -94,12 +85,14 @@ public class FluidTransformRegistry extends BaseRegistryMap<String, List<FluidTr
         }
     }
 
-    public List<FluidTransformer> getFluidTransformers() {
-        List<FluidTransformer> fluidTransformers = new ArrayList<>();
-        for (List<FluidTransformer> transformers : registry.values()) {
-            fluidTransformers.addAll(transformers);
+    @Override
+    protected void registerEntriesFromJSON(FileReader fr) {
+        List<FluidTransformer> gsonInput = gson.fromJson(fr, new TypeToken<List<FluidTransformer>>() {
+        }.getType());
+
+        for (FluidTransformer transformer : gsonInput) {
+            register(transformer);
         }
-        return fluidTransformers;
     }
 
     @Override
@@ -115,5 +108,13 @@ public class FluidTransformRegistry extends BaseRegistryMap<String, List<FluidTr
             }
         });
         return fluidTransformRecipes;
+    }
+
+    public List<FluidTransformer> getFluidTransformers() {
+        List<FluidTransformer> fluidTransformers = new ArrayList<>();
+        for (List<FluidTransformer> transformers : registry.values()) {
+            fluidTransformers.addAll(transformers);
+        }
+        return fluidTransformers;
     }
 }

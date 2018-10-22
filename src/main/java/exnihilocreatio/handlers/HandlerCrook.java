@@ -72,9 +72,7 @@ public class HandlerCrook {
             return ((ICrook) stack.getItem()).isCrook(stack);
 
         // Inspirations compatibility
-        if (stack.getItem().getToolClasses(stack).contains("crook"))
-            return true;
+        return stack.getItem().getToolClasses(stack).contains("crook");
 
-        return false;
     }
 }

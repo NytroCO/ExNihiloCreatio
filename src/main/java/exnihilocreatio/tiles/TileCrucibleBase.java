@@ -62,6 +62,10 @@ public abstract class TileCrucibleBase extends BaseTileEntity implements ITickab
 
     public abstract int getHeatRate();
 
+    public void updateCrucible(int heatRate) {
+
+    }
+
     /**
      * Returns array of FLUID color and Item Color
      * ITEMCOLOR is index 0
@@ -173,45 +177,6 @@ public abstract class TileCrucibleBase extends BaseTileEntity implements ITickab
         return true;
     }
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public <T> T getCapability(@Nonnull Capability<T> capability, EnumFacing facing) {
-        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            // itemHandler.setTe(this);
-            return (T) itemHandler;
-        }
-        if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
-            return (T) tank;
-
-        return super.getCapability(capability, facing);
-    }
-
-    @Override
-    public boolean hasCapability(@Nonnull Capability<?> capability, EnumFacing facing) {
-        return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ||
-                capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY ||
-                super.hasCapability(capability, facing);
-    }
-
-    @Override
-    @Nonnull
-    public NBTTagCompound writeToNBT(NBTTagCompound tag) {
-        if (currentItem.isValid()) {
-            NBTTagCompound currentItemTag = currentItem.writeToNBT(new NBTTagCompound());
-            tag.setTag("currentItem", currentItemTag);
-        }
-
-        tag.setInteger("solidAmount", solidAmount);
-
-        NBTTagCompound itemHandlerTag = itemHandler.serializeNBT();
-        tag.setTag("itemHandler", itemHandlerTag);
-
-        NBTTagCompound tankTag = tank.writeToNBT(new NBTTagCompound());
-        tag.setTag("tank", tankTag);
-
-        return super.writeToNBT(tag);
-    }
-
     @Override
     public void readFromNBT(NBTTagCompound tag) {
         if (tag.hasKey("currentItem")) {
@@ -234,7 +199,46 @@ public abstract class TileCrucibleBase extends BaseTileEntity implements ITickab
     }
 
     @Override
+    @Nonnull
+    public NBTTagCompound writeToNBT(NBTTagCompound tag) {
+        if (currentItem.isValid()) {
+            NBTTagCompound currentItemTag = currentItem.writeToNBT(new NBTTagCompound());
+            tag.setTag("currentItem", currentItemTag);
+        }
+
+        tag.setInteger("solidAmount", solidAmount);
+
+        NBTTagCompound itemHandlerTag = itemHandler.serializeNBT();
+        tag.setTag("itemHandler", itemHandlerTag);
+
+        NBTTagCompound tankTag = tank.writeToNBT(new NBTTagCompound());
+        tag.setTag("tank", tankTag);
+
+        return super.writeToNBT(tag);
+    }
+
+    @Override
     public boolean hasFastRenderer() {
         return true;
+    }
+
+    @Override
+    public boolean hasCapability(@Nonnull Capability<?> capability, EnumFacing facing) {
+        return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ||
+                capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY ||
+                super.hasCapability(capability, facing);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> T getCapability(@Nonnull Capability<T> capability, EnumFacing facing) {
+        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+            // itemHandler.setTe(this);
+            return (T) itemHandler;
+        }
+        if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
+            return (T) tank;
+
+        return super.getCapability(capability, facing);
     }
 }

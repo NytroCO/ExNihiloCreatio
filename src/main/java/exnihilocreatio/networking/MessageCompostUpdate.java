@@ -50,6 +50,28 @@ public class MessageCompostUpdate implements IMessage {
     }
 
     @Override
+    public void fromBytes(ByteBuf buf) {
+        this.x = buf.readInt();
+        this.y = buf.readInt();
+        this.z = buf.readInt();
+        this.fillAmount = buf.readFloat();
+        this.progress = buf.readFloat();
+        this.color = new Color(buf.readFloat(), buf.readFloat(), buf.readFloat(), buf.readFloat());
+        this.compValue = buf.readFloat();
+        this.isFirst = buf.readBoolean();
+        int length = buf.readInt();
+        String name = buf.readCharSequence(length, Charset.defaultCharset()).toString();
+        int meta = buf.readInt();
+
+        Item item = Item.getByNameOrId(name);
+        if (item != null) {
+            this.stack = new ItemStack(item, 1, meta);
+        } else {
+            this.stack = ItemStack.EMPTY;
+        }
+    }
+
+    @Override
     public void toBytes(ByteBuf buf) {
         buf.writeInt(x);
         buf.writeInt(y);
@@ -67,28 +89,6 @@ public class MessageCompostUpdate implements IMessage {
         buf.writeCharSequence(stack.getItem().getRegistryName().toString(), CHARSET);
         buf.writeInt(stack.getMetadata());
 
-    }
-
-    @Override
-    public void fromBytes(ByteBuf buf) {
-        this.x = buf.readInt();
-        this.y = buf.readInt();
-        this.z = buf.readInt();
-        this.fillAmount = buf.readFloat();
-        this.progress = buf.readFloat();
-        this.color = new Color(buf.readFloat(),buf.readFloat(),buf.readFloat(),buf.readFloat());
-        this.compValue = buf.readFloat();
-        this.isFirst = buf.readBoolean();
-        int length = buf.readInt();
-        String name = buf.readCharSequence(length, Charset.defaultCharset()).toString();
-        int meta = buf.readInt();
-
-        Item item = Item.getByNameOrId(name);
-        if (item != null) {
-            this.stack = new ItemStack(item, 1, meta);
-        } else {
-            this.stack = ItemStack.EMPTY;
-        }
     }
 
     @Override
@@ -120,7 +120,7 @@ public class MessageCompostUpdate implements IMessage {
                         BarrelModeCompost mode = (BarrelModeCompost) te.getMode();
                         mode.setFillAmount(msg.fillAmount);
 
-                        if (msg.stack.isEmpty() && msg.compValue == 0.0f){
+                        if (msg.stack.isEmpty() && msg.compValue == 0.0f) {
                             // Progress is being made
                             mode.setColor(Color.average(mode.getOriginalColor(), whiteColor, msg.progress));
                         } else {

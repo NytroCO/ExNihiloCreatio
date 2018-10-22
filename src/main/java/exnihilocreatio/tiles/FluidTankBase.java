@@ -25,18 +25,19 @@ public class FluidTankBase extends FluidTank {
         this.tileEntity = tileEntity;
     }
 
+    @Override
+    public int fillInternal(FluidStack resource, boolean doFill) {
+        return super.fillInternal(resource, doFill);
+    }
+
     @Nullable
     @Override
     public FluidStack drainInternal(int maxDrain, boolean doDrain) {
-        FluidStack stack = super.drainInternal(maxDrain, doDrain);
-        tileEntity.markDirtyClient();
-        return stack;
+        return super.drainInternal(maxDrain, doDrain);
     }
 
     @Override
-    public int fillInternal(FluidStack resource, boolean doFill) {
-        int i = super.fillInternal(resource, doFill);
+    protected void onContentsChanged() {
         tileEntity.markDirtyClient();
-        return i;
     }
 }

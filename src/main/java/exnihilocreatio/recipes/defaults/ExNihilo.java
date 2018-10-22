@@ -32,6 +32,17 @@ public class ExNihilo implements IRecipeDefaults {
     @Getter
     public String MODID = ExNihiloCreatio.MODID;
 
+    public static Map<BlockInfo, BlockInfo> getLeavesSapling() {
+        Map<BlockInfo, BlockInfo> saplingMap = new LinkedHashMap<>();
+        saplingMap.put(new BlockInfo(Blocks.LEAVES, 0), new BlockInfo(Blocks.SAPLING, 0));
+        saplingMap.put(new BlockInfo(Blocks.LEAVES, 1), new BlockInfo(Blocks.SAPLING, 1));
+        saplingMap.put(new BlockInfo(Blocks.LEAVES, 2), new BlockInfo(Blocks.SAPLING, 2));
+        saplingMap.put(new BlockInfo(Blocks.LEAVES, 3), new BlockInfo(Blocks.SAPLING, 3));
+        saplingMap.put(new BlockInfo(Blocks.LEAVES2, 0), new BlockInfo(Blocks.SAPLING, 4));
+        saplingMap.put(new BlockInfo(Blocks.LEAVES2, 1), new BlockInfo(Blocks.SAPLING, 5));
+
+        return saplingMap;
+    }
 
     @Override
     public void registerCompost(CompostRegistry registry) {
@@ -180,18 +191,16 @@ public class ExNihilo implements IRecipeDefaults {
         // All default Ores
         for (ItemOre ore : oreRegistry.getItemOreRegistry()) {
             if (oreRegistry.getSieveBlackList().contains(ore)) continue;
-            if(ore.getOre().getName() == "iron"){
+            if (ore.getOre().getName() == "iron") {
                 registry.register("gravel", new ItemInfo(ore), getDropChance(0.1f), MeshType.FLINT.getID());
                 registry.register("gravel", new ItemInfo(ore), getDropChance(0.15f), MeshType.IRON.getID());
                 registry.register("gravel", new ItemInfo(ore), getDropChance(0.25f), MeshType.DIAMOND.getID());
-                registry.register(new BlockInfo(Blocks.SAND,1), new ItemInfo(ore), getDropChance(0.4f), MeshType.DIAMOND.getID());
-            }
-            else if (ore.getOre().getName() == "uranium") {
+                registry.register(new BlockInfo(Blocks.SAND, 1), new ItemInfo(ore), getDropChance(0.4f), MeshType.DIAMOND.getID());
+            } else if (ore.getOre().getName() == "uranium") {
                 registry.register("gravel", new ItemInfo(ore), getDropChance(0.008f), MeshType.FLINT.getID());
                 registry.register("gravel", new ItemInfo(ore), getDropChance(0.009f), MeshType.IRON.getID());
                 registry.register("gravel", new ItemInfo(ore), getDropChance(0.01f), MeshType.DIAMOND.getID());
-            }
-            else{
+            } else {
                 registry.register("gravel", new ItemInfo(ore), getDropChance(0.05f), MeshType.FLINT.getID());
                 registry.register("gravel", new ItemInfo(ore), getDropChance(0.075f), MeshType.IRON.getID());
                 registry.register("gravel", new ItemInfo(ore), getDropChance(0.15f), MeshType.DIAMOND.getID());
@@ -324,7 +333,7 @@ public class ExNihilo implements IRecipeDefaults {
         registry.register(FluidRegistry.LAVA, "dustGlowstone", new ItemInfo(new ItemStack(Blocks.END_STONE)));
         registry.register(ModFluids.fluidWitchwater, "sand", new ItemInfo(new ItemStack(Blocks.SOUL_SAND)));
 
-        if (FluidRegistry.isFluidRegistered("milk")){
+        if (FluidRegistry.isFluidRegistered("milk")) {
             registry.register(FluidRegistry.getFluid("milk"), new ItemInfo(new ItemStack(Blocks.BROWN_MUSHROOM)), new ItemInfo(new ItemStack(Blocks.SLIME_BLOCK)), "Slime");
             registry.register(FluidRegistry.getFluid("milk"), new ItemInfo(new ItemStack(Blocks.RED_MUSHROOM)), new ItemInfo(new ItemStack(Blocks.SLIME_BLOCK)), "Slime");
         }
@@ -378,17 +387,5 @@ public class ExNihilo implements IRecipeDefaults {
         if (ModConfig.world.isSkyWorld)
             return chance;
         else return chance / 100f * (float) ModConfig.world.normalDropPercent;
-    }
-
-    public static Map<BlockInfo, BlockInfo> getLeavesSapling(){
-        Map<BlockInfo, BlockInfo> saplingMap = new LinkedHashMap<>();
-        saplingMap.put(new BlockInfo(Blocks.LEAVES, 0), new BlockInfo(Blocks.SAPLING, 0));
-        saplingMap.put(new BlockInfo(Blocks.LEAVES, 1), new BlockInfo(Blocks.SAPLING, 1));
-        saplingMap.put(new BlockInfo(Blocks.LEAVES, 2), new BlockInfo(Blocks.SAPLING, 2));
-        saplingMap.put(new BlockInfo(Blocks.LEAVES, 3), new BlockInfo(Blocks.SAPLING, 3));
-        saplingMap.put(new BlockInfo(Blocks.LEAVES2, 0), new BlockInfo(Blocks.SAPLING, 4));
-        saplingMap.put(new BlockInfo(Blocks.LEAVES2, 1), new BlockInfo(Blocks.SAPLING, 5));
-
-        return saplingMap;
     }
 }

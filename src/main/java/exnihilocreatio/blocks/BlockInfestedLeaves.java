@@ -36,13 +36,6 @@ public class BlockInfestedLeaves extends BlockInfestingLeaves {
     }
 
     @Override
-    @Nonnull
-    @Deprecated
-    public EnumBlockRenderType getRenderType(IBlockState state) {
-        return EnumBlockRenderType.MODEL;
-    }
-
-    @Override
     public void randomTick(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull IBlockState state, @Nonnull Random rand) {
         this.updateTick(world, pos, state, rand);
         if (!world.isRemote) {
@@ -64,20 +57,17 @@ public class BlockInfestedLeaves extends BlockInfestingLeaves {
         super.neighborChanged(state, worldIn, pos, blockIn, fromPos);
     }
 
-    public void destroy(World worldIn, @Nonnull BlockPos pos) {
-        if (worldIn.rand.nextInt(3) == 0) {
-            if (worldIn.rand.nextFloat() < ModConfig.crooking.stringChance / 4.0d) {
-                spawnAsEntity(worldIn, pos, new ItemStack(Items.STRING));
-            }
-        }
-        super.destroy(worldIn, pos);
+    @Override
+    @Nonnull
+    @Deprecated
+    public EnumBlockRenderType getRenderType(IBlockState state) {
+        return EnumBlockRenderType.MODEL;
     }
 
     @Override
     public TileEntity createNewTileEntity(@Nonnull World worldIn, int meta) {
         return new TileInfestedLeaves();
     }
-
 
     @Override
     public void onBlockHarvested(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
@@ -106,6 +96,15 @@ public class BlockInfestedLeaves extends BlockInfestingLeaves {
     public void addProbeInfo(ProbeMode mode, IProbeInfo probeInfo, EntityPlayer player, World world,
                              IBlockState blockState, IProbeHitData data) {
         probeInfo.text("Progress: Done");
+    }
+
+    public void destroy(World worldIn, @Nonnull BlockPos pos) {
+        if (worldIn.rand.nextInt(3) == 0) {
+            if (worldIn.rand.nextFloat() < ModConfig.crooking.stringChance / 4.0d) {
+                spawnAsEntity(worldIn, pos, new ItemStack(Items.STRING));
+            }
+        }
+        super.destroy(worldIn, pos);
     }
 
 

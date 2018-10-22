@@ -71,8 +71,14 @@ public class Color {
         return color;
     }
 
-    public String getAsHexNoAlpha(){
+    public String getAsHexNoAlpha() {
         return Integer.toHexString(toIntNoAlpha());
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(r, g, b, a);
     }
 
     @Override
@@ -84,12 +90,6 @@ public class Color {
                 Float.compare(color.g, g) == 0 &&
                 Float.compare(color.b, b) == 0 &&
                 Float.compare(color.a, a) == 0;
-    }
-
-    @Override
-    public int hashCode() {
-
-        return Objects.hash(r, g, b, a);
     }
 
     @Override

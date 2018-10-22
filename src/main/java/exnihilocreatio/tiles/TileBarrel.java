@@ -177,6 +177,26 @@ public class TileBarrel extends BaseTileEntity implements ITickable {
     }
 
     @Override
+    public void readFromNBT(NBTTagCompound tag) {
+        tank.readFromNBT(tag);
+        if (tag.hasKey("mode")) {
+            NBTTagCompound barrelModeTag = (NBTTagCompound) tag.getTag("mode");
+            this.setMode(barrelModeTag.getString("name"));
+            if (mode != null)
+                mode.readFromNBT(barrelModeTag);
+        }
+
+        if (tag.hasKey("itemHandler")) {
+            itemHandler.deserializeNBT((NBTTagCompound) tag.getTag("itemHandler"));
+        }
+
+        if (tag.hasKey("barrelTier")) {
+            tier = tag.getInteger("barrelTier");
+        }
+        super.readFromNBT(tag);
+    }
+
+    @Override
     @Nonnull
     public NBTTagCompound writeToNBT(NBTTagCompound tag) {
         tank.writeToNBT(tag);
@@ -197,23 +217,27 @@ public class TileBarrel extends BaseTileEntity implements ITickable {
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound tag) {
-        tank.readFromNBT(tag);
-        if (tag.hasKey("mode")) {
-            NBTTagCompound barrelModeTag = (NBTTagCompound) tag.getTag("mode");
-            this.setMode(barrelModeTag.getString("name"));
-            if (mode != null)
-                mode.readFromNBT(barrelModeTag);
-        }
+    public boolean hasFastRenderer() {
+        return true;
+    }
 
-        if (tag.hasKey("itemHandler")) {
-            itemHandler.deserializeNBT((NBTTagCompound) tag.getTag("itemHandler"));
-        }
+    @Override
+    public boolean hasCapability(@Nonnull Capability<?> capability, EnumFacing facing) {
+        return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ||
+                capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY ||
+                super.hasCapability(capability, facing);
+    }
 
-        if (tag.hasKey("barrelTier")) {
-            tier = tag.getInteger("barrelTier");
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> T getCapability(@Nonnull Capability<T> capability, EnumFacing facing) {
+        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+            return (T) itemHandler;
         }
-        super.readFromNBT(tag);
+        if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
+            return (T) tank;
+
+        return super.getCapability(capability, facing);
     }
 
     public void setMode(String modeName) {
@@ -233,25 +257,6 @@ public class TileBarrel extends BaseTileEntity implements ITickable {
         this.markDirty();
     }
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public <T> T getCapability(@Nonnull Capability<T> capability, EnumFacing facing) {
-        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            return (T) itemHandler;
-        }
-        if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
-            return (T) tank;
-
-        return super.getCapability(capability, facing);
-    }
-
-    @Override
-    public boolean hasCapability(@Nonnull Capability<?> capability, EnumFacing facing) {
-        return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ||
-                capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY ||
-                super.hasCapability(capability, facing);
-    }
-
     //TODO: Add Moo Fluids support if it ever updates
     public void entityOnTop(World world, Entity entityIn) {
         long currentTime = world.getTotalWorldTime(); //Get the current time, shouldn't be affected by in-game /time command
@@ -267,10 +272,5 @@ public class TileBarrel extends BaseTileEntity implements ITickable {
 
         //Set the new cooldown time
         this.entityWalkCooldown = currentTime + milk.getCoolDown();
-    }
-
-    @Override
-    public boolean hasFastRenderer() {
-        return true;
     }
 }

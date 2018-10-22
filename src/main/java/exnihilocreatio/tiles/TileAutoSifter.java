@@ -57,7 +57,7 @@ public class TileAutoSifter extends BaseTileEntity implements ITickable, IRotati
             BlockPos posOther = pos.up();
             TileEntity te = world.getTileEntity(posOther);
 
-            if (te != null && te instanceof TileSieve) {
+            if (te instanceof TileSieve) {
                 toSift = collectPossibleSieves((TileSieve) te);
             } else {
                 toSift = null;
@@ -130,7 +130,7 @@ public class TileAutoSifter extends BaseTileEntity implements ITickable, IRotati
     }
 
     private boolean isValidPartnerSieve(TileSieve thisSieve, TileEntity tileOther) {
-        if (tileOther != null && tileOther instanceof TileSieve) {
+        if (tileOther instanceof TileSieve) {
 
             TileSieve sieve = (TileSieve) tileOther;
             sieve.validateAutoSieve();
@@ -168,21 +168,29 @@ public class TileAutoSifter extends BaseTileEntity implements ITickable, IRotati
         perTickRotation = rotation;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public <T> T getCapability(@Nonnull Capability<T> capability, EnumFacing facing) {
-        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
-            return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(itemHandlerAutoSifter);
-        if (capability == CapabilityRotationalMember.ROTIONAL_MEMBER)
-            return CapabilityRotationalMember.ROTIONAL_MEMBER.cast(this);
-        return super.getCapability(capability, facing);
-    }
+    public void readFromNBT(NBTTagCompound tag) {
+        // if (tag.hasKey("currentItem")) {
+        //     currentItem = ItemInfo.readFromNBT(tag.getCompoundTag("currentItem"));
+        // } else {
+        //     currentItem = null;
+        // } TODO: see above
 
-    @Override
-    public boolean hasCapability(@Nonnull Capability<?> capability, EnumFacing facing) {
-        return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ||
-                (capability == CapabilityRotationalMember.ROTIONAL_MEMBER && facing == this.facing) ||
-                super.hasCapability(capability, facing);
+        if (tag.hasKey("itemHandler")) {
+            itemHandlerAutoSifter.deserializeNBT((NBTTagCompound) tag.getTag("itemHandler"));
+        }
+
+        if (tag.hasKey("facing"))
+            facing = EnumFacing.byName(tag.getString("facing"));
+
+        if (tag.hasKey("rot"))
+            rotationValue = tag.getFloat("rot");
+
+        if (tag.hasKey("sRot"))
+            storedRotationalPower = tag.getFloat("sRot");
+
+
+        super.readFromNBT(tag);
     }
 
     @Override
@@ -207,28 +215,20 @@ public class TileAutoSifter extends BaseTileEntity implements ITickable, IRotati
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound tag) {
-        // if (tag.hasKey("currentItem")) {
-        //     currentItem = ItemInfo.readFromNBT(tag.getCompoundTag("currentItem"));
-        // } else {
-        //     currentItem = null;
-        // } TODO: see above
+    public boolean hasCapability(@Nonnull Capability<?> capability, EnumFacing facing) {
+        return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ||
+                (capability == CapabilityRotationalMember.ROTIONAL_MEMBER && facing == this.facing) ||
+                super.hasCapability(capability, facing);
+    }
 
-        if (tag.hasKey("itemHandler")) {
-            itemHandlerAutoSifter.deserializeNBT((NBTTagCompound) tag.getTag("itemHandler"));
-        }
-
-        if (tag.hasKey("facing"))
-            facing = EnumFacing.byName(tag.getString("facing"));
-
-        if (tag.hasKey("rot"))
-            rotationValue = tag.getFloat("rot");
-
-        if (tag.hasKey("sRot"))
-            storedRotationalPower = tag.getFloat("sRot");
-
-
-        super.readFromNBT(tag);
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> T getCapability(@Nonnull Capability<T> capability, EnumFacing facing) {
+        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+            return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(itemHandlerAutoSifter);
+        if (capability == CapabilityRotationalMember.ROTIONAL_MEMBER)
+            return CapabilityRotationalMember.ROTIONAL_MEMBER.cast(this);
+        return super.getCapability(capability, facing);
     }
 
     @SideOnly(Side.CLIENT)

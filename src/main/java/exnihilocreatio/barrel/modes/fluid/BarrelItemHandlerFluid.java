@@ -49,10 +49,10 @@ public class BarrelItemHandlerFluid extends ItemStackHandler {
                     PacketHandler.sendToAllAround(new MessageBarrelModeUpdate("block", barrel.getPos()), barrel);
 
                     barrel.getMode().addItem(info.getItemStack(), barrel);
-                    if(spawnCount > 0){
+                    if (spawnCount > 0) {
                         int spawnRange = transformer.getSpawnRange();
                         EntityInfo entityInfo = transformer.getToSpawn();
-                        for(int i=0; i<spawnCount; i++){
+                        for (int i = 0; i < spawnCount; i++) {
                             entityInfo.spawnEntityNear(barrel.getPos(), spawnRange, barrel.getWorld());
                         }
                     }

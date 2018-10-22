@@ -61,6 +61,11 @@ public class CrucibleRecipeCategory implements IRecipeCategory<CrucibleRecipe> {
     }
 
     @Override
+    public IDrawable getIcon() {
+        return null;
+    }
+
+    @Override
     public void drawExtras(@Nonnull Minecraft minecraft) {
         if (hasHighlight) {
             slotHighlight.draw(minecraft, highlightX, highlightY);
@@ -82,33 +87,28 @@ public class CrucibleRecipeCategory implements IRecipeCategory<CrucibleRecipe> {
         }
 
 
-            int slotIndex = 1;
+        int slotIndex = 1;
 
-            for (int i = 0; i < recipeWrapper.getInputs().size(); i++) {
-                final int slotX = 2 + (i % 9 * 18);
-                final int slotY = 36 + (i / 9 * 18);
+        for (int i = 0; i < recipeWrapper.getInputs().size(); i++) {
+            final int slotX = 2 + (i % 9 * 18);
+            final int slotY = 36 + (i / 9 * 18);
 
-                ItemStack inputStack = recipeWrapper.getInputs().get(i);
+            ItemStack inputStack = recipeWrapper.getInputs().get(i);
 
-                recipeLayout.getItemStacks().init(slotIndex + i, true, slotX, slotY);
-                recipeLayout.getItemStacks().set(slotIndex + i, inputStack);
+            recipeLayout.getItemStacks().init(slotIndex + i, true, slotX, slotY);
+            recipeLayout.getItemStacks().set(slotIndex + i, inputStack);
 
-                if (mightHaveHighlight && ItemStack.areItemsEqual((ItemStack) focus.getValue(), inputStack)) {
-                    highlightX = slotX;
-                    highlightY = slotY;
+            if (mightHaveHighlight && ItemStack.areItemsEqual((ItemStack) focus.getValue(), inputStack)) {
+                highlightX = slotX;
+                highlightY = slotY;
 
-                    hasHighlight = true;
-                    mightHaveHighlight = false;
-                }
+                hasHighlight = true;
+                mightHaveHighlight = false;
+            }
 
         }
 
         recipeLayout.getItemStacks().addTooltipCallback(new CrucibleTooltipCallback());
-    }
-
-    @Override
-    public IDrawable getIcon() {
-        return null;
     }
 
     private static class CrucibleTooltipCallback implements ITooltipCallback<ItemStack> {

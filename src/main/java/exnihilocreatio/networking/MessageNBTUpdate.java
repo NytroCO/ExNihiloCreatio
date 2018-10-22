@@ -28,19 +28,19 @@ public class MessageNBTUpdate implements IMessage {
     }
 
     @Override
-    public void toBytes(ByteBuf buf) {
-        buf.writeInt(x);
-        buf.writeInt(y);
-        buf.writeInt(z);
-        ByteBufUtils.writeTag(buf, tag);
-    }
-
-    @Override
     public void fromBytes(ByteBuf buf) {
         this.x = buf.readInt();
         this.y = buf.readInt();
         this.z = buf.readInt();
         this.tag = ByteBufUtils.readTag(buf);
+    }
+
+    @Override
+    public void toBytes(ByteBuf buf) {
+        buf.writeInt(x);
+        buf.writeInt(y);
+        buf.writeInt(z);
+        ByteBufUtils.writeTag(buf, tag);
     }
 
     public static class MessageNBTUpdateHandler implements IMessageHandler<MessageNBTUpdate, IMessage> {

@@ -76,6 +76,15 @@ public class TileWaterwheel extends BaseTileEntity implements ITickable, IRotati
         }
     }
 
+    @Override
+    public void readFromNBT(NBTTagCompound tag) {
+        super.readFromNBT(tag);
+
+        if (tag.hasKey("facing"))
+            facing = EnumFacing.byName(tag.getString("facing"));
+        if (tag.hasKey("rot"))
+            rotationValue = tag.getFloat("rot");
+    }
 
     @Override
     @Nonnull
@@ -88,13 +97,16 @@ public class TileWaterwheel extends BaseTileEntity implements ITickable, IRotati
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound tag) {
-        super.readFromNBT(tag);
+    public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
+        return capability == CapabilityRotationalMember.ROTIONAL_MEMBER && facing == this.facing || super.hasCapability(capability, facing);
+    }
 
-        if (tag.hasKey("facing"))
-            facing = EnumFacing.byName(tag.getString("facing"));
-        if (tag.hasKey("rot"))
-            rotationValue = tag.getFloat("rot");
+    @Nullable
+    @Override
+    public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
+        if (capability == CapabilityRotationalMember.ROTIONAL_MEMBER && facing == this.facing)
+            return CapabilityRotationalMember.ROTIONAL_MEMBER.cast(this);
+        return super.getCapability(capability, facing);
     }
 
     @Override
@@ -109,19 +121,6 @@ public class TileWaterwheel extends BaseTileEntity implements ITickable, IRotati
         } else {
             return 0;
         }
-    }
-
-    @Override
-    public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
-        return capability == CapabilityRotationalMember.ROTIONAL_MEMBER && facing == this.facing || super.hasCapability(capability, facing);
-    }
-
-    @Nullable
-    @Override
-    public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
-        if (capability == CapabilityRotationalMember.ROTIONAL_MEMBER && facing == this.facing)
-            return CapabilityRotationalMember.ROTIONAL_MEMBER.cast(this);
-        return super.getCapability(capability, facing);
     }
 
     @Override

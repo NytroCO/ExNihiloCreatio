@@ -1,5 +1,6 @@
 package exnihilocreatio.tiles;
 
+import exnihilocreatio.blocks.BlockInfestingLeaves;
 import exnihilocreatio.networking.PacketHandler;
 import exnihilocreatio.util.BlockInfo;
 import lombok.Getter;
@@ -16,16 +17,17 @@ public class TileInfestedLeaves extends BaseTileEntity implements ITileLeafBlock
     @Getter
     private IBlockState leafBlock = Blocks.LEAVES.getDefaultState();
 
-
-    @Override
-    @Nonnull
-    public AxisAlignedBB getRenderBoundingBox() {
-        return INFINITE_EXTENT_AABB;
-    }
-
     public void setLeafBlock(IBlockState block) {
         leafBlock = block;
         PacketHandler.sendNBTUpdate(this);
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public void readFromNBT(NBTTagCompound tag) {
+        super.readFromNBT(tag);
+
+        leafBlock = TileInfestingLeaves.getLeafFromBlock(tag);
     }
 
     @Override
@@ -37,19 +39,10 @@ public class TileInfestedLeaves extends BaseTileEntity implements ITileLeafBlock
         return tag;
     }
 
-    @SuppressWarnings("deprecation")
     @Override
-    public void readFromNBT(NBTTagCompound tag) {
-        super.readFromNBT(tag);
-
-        if (tag.hasKey("leafBlock") && tag.hasKey("leafBlockMeta")) {
-            BlockInfo leaves = new BlockInfo(Block.getBlockFromName(tag.getString("leafBlock")), tag.getInteger("leafBlockMeta"));
-            if (leaves.isValid())
-                leafBlock = leaves.getBlockState();
-            else leafBlock = Blocks.LEAVES.getDefaultState();
-        } else {
-            leafBlock = Blocks.LEAVES.getDefaultState();
-        }
+    @Nonnull
+    public AxisAlignedBB getRenderBoundingBox() {
+        return INFINITE_EXTENT_AABB;
     }
 
     @Override

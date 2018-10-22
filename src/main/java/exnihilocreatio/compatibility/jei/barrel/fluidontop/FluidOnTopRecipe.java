@@ -41,22 +41,6 @@ public class FluidOnTopRecipe implements IRecipeWrapper {
         ingredients.setOutput(ItemStack.class, outputStack);
     }
 
-    public List<ItemStack> getInputs() {
-        return ImmutableList.of(inputBucketInBarrel, inputBucketOnTop);
-    }
-
-    public List<ItemStack> getOutputs() {
-        return ImmutableList.of(outputStack);
-    }
-
-    public List<FluidStack> getFluidInputs() {
-        return ImmutableList.of(inputFluidInBarrel, inputFluidOnTop);
-    }
-
-    public boolean isValid() {
-        return !inputBucketInBarrel.isEmpty() && !inputBucketOnTop.isEmpty() && !outputStack.isEmpty();
-    }
-
     @Override
     public void drawInfo(@Nonnull Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
 
@@ -71,5 +55,21 @@ public class FluidOnTopRecipe implements IRecipeWrapper {
     @Override
     public boolean handleClick(@Nonnull Minecraft minecraft, int mouseX, int mouseY, int mouseButton) {
         return false;
+    }
+
+    public List<ItemStack> getInputs() {
+        return ImmutableList.of(inputBucketInBarrel, inputBucketOnTop);
+    }
+
+    public List<ItemStack> getOutputs() {
+        return ImmutableList.of(outputStack);
+    }
+
+    public List<FluidStack> getFluidInputs() {
+        return ImmutableList.of(inputFluidInBarrel, inputFluidOnTop);
+    }
+
+    public boolean isValid() {
+        return !inputBucketInBarrel.isEmpty() && !inputBucketOnTop.isEmpty() && !outputStack.isEmpty();
     }
 }

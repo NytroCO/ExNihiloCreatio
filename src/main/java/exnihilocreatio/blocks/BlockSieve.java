@@ -10,14 +10,12 @@ import exnihilocreatio.tiles.TileSieve;
 import exnihilocreatio.util.Util;
 import mcjty.theoneprobe.api.IProbeHitData;
 import mcjty.theoneprobe.api.IProbeInfo;
-import mcjty.theoneprobe.api.ITextStyle;
 import mcjty.theoneprobe.api.ProbeMode;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
@@ -32,8 +30,6 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import p455w0rd.danknull.init.ModItems;
@@ -55,6 +51,59 @@ public class BlockSieve extends BlockBase implements ITileEntityProvider, ITOPIn
         this.setHardness(2.0f);
         this.setCreativeTab(ExNihiloCreatio.tabExNihilo);
         this.setDefaultState(this.blockState.getBaseState().withProperty(MESH, MeshType.NO_RENDER));
+    }
+
+    @Override
+    public TileEntity createNewTileEntity(@Nonnull World worldIn, int meta) {
+        return new TileSieve();
+    }
+
+    //region >>>> RENDERING OPTIONS
+    @Override
+    @Deprecated
+    public boolean isFullBlock(IBlockState state) {
+        return false;
+    }
+
+    @Override
+    @Nonnull
+    @Deprecated
+    public IBlockState getStateFromMeta(int meta) {
+        return getDefaultState();
+    }
+
+    @Override
+    public int getMetaFromState(IBlockState state) {
+        return 0;
+    }
+
+    @Override
+    @Deprecated
+    public boolean isFullCube(IBlockState state) {
+        return false;
+    }
+
+    @Override
+    public boolean shouldSideBeRendered(IBlockState blockState, @Nonnull IBlockAccess blockAccess, @Nonnull BlockPos pos, EnumFacing side) {
+        return false;
+    }
+
+    @Override
+    @Deprecated
+    public boolean isOpaqueCube(IBlockState state) {
+        return false;
+    }
+
+    @Override
+    public void breakBlock(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull IBlockState state) {
+        TileEntity te = world.getTileEntity(pos);
+        if (te != null) {
+            TileSieve sieve = (TileSieve) te;
+            if (!sieve.getMeshStack().isEmpty())
+                Util.dropItemInWorld(sieve, null, sieve.getMeshStack(), 0.02f);
+        }
+
+        super.breakBlock(world, pos, state);
     }
 
     @Override
@@ -95,23 +144,23 @@ public class BlockSieve extends BlockBase implements ITileEntityProvider, ITOPIn
             IItemHandler cap = null;
             int slotNumber = -1;
 
-            if (!SIEVE_REGISTRY.canBeSifted(heldItem) && heldItem.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)){
+            if (!SIEVE_REGISTRY.canBeSifted(heldItem) && heldItem.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)) {
                 if (ModConfig.compatibility.dankNullIntegration && Loader.isModLoaded("danknull") && heldItem.getItem() == ModItems.DANK_NULL) {
                     dank = DankNullUtils.getNewDankNullInventory(heldItem);
                     ItemStack dankStack = DankNullUtils.getSelectedStack(dank);
                     if (SIEVE_REGISTRY.canBeSifted(dankStack)) {
                         heldItem = dankStack;
                     }
-                } else if (ModConfig.compatibility.generalItemHandlerCompat){
+                } else if (ModConfig.compatibility.generalItemHandlerCompat) {
                     cap = heldItem.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
-                    if (cap != null){
+                    if (cap != null) {
                         int slots = cap.getSlots();
                         for (int i = 0; i < slots; i++) {
                             ItemStack capStack = cap.getStackInSlot(i);
                             if (capStack.isEmpty())
                                 continue;
 
-                            if (SIEVE_REGISTRY.canBeSifted(capStack)){
+                            if (SIEVE_REGISTRY.canBeSifted(capStack)) {
                                 heldItem = capStack;
                                 slotNumber = i;
                                 break;
@@ -130,7 +179,7 @@ public class BlockSieve extends BlockBase implements ITileEntityProvider, ITOPIn
                 for (int xOffset = -1 * ModConfig.sieve.sieveSimilarRadius; xOffset <= ModConfig.sieve.sieveSimilarRadius; xOffset++) {
                     for (int zOffset = -1 * ModConfig.sieve.sieveSimilarRadius; zOffset <= ModConfig.sieve.sieveSimilarRadius; zOffset++) {
                         TileEntity entity = world.getTileEntity(pos.add(xOffset, 0, zOffset));
-                        if (entity != null && entity instanceof TileSieve) {
+                        if (entity instanceof TileSieve) {
                             TileSieve sieve = (TileSieve) entity;
 
                             if (!heldItem.isEmpty() && te.isSieveSimilarToInput(sieve)) {
@@ -139,7 +188,7 @@ public class BlockSieve extends BlockBase implements ITileEntityProvider, ITOPIn
                                     heldItem.shrink(1);
 
                                     // dank/null needing this to show the correct amount
-                                    if (dank != null){
+                                    if (dank != null) {
                                         DankNullUtils.reArrangeStacks(dank);
                                     } else if (cap != null && slotNumber != -1) {
 
@@ -163,7 +212,7 @@ public class BlockSieve extends BlockBase implements ITileEntityProvider, ITOPIn
             for (int xOffset = -1 * ModConfig.sieve.sieveSimilarRadius; xOffset <= ModConfig.sieve.sieveSimilarRadius; xOffset++) {
                 for (int zOffset = -1 * ModConfig.sieve.sieveSimilarRadius; zOffset <= ModConfig.sieve.sieveSimilarRadius; zOffset++) {
                     TileEntity entity = world.getTileEntity(pos.add(xOffset, 0, zOffset));
-                    if (entity != null && entity instanceof TileSieve) {
+                    if (entity instanceof TileSieve) {
                         TileSieve sieve = (TileSieve) entity;
 
                         if (te.isSieveSimilar(sieve))
@@ -190,60 +239,6 @@ public class BlockSieve extends BlockBase implements ITileEntityProvider, ITOPIn
     @Nonnull
     protected BlockStateContainer createBlockState() {
         return new BlockStateContainer(this, MESH);
-    }
-
-    @Override
-    @Nonnull
-    @Deprecated
-    public IBlockState getStateFromMeta(int meta) {
-        return getDefaultState();
-    }
-
-    @Override
-    public int getMetaFromState(IBlockState state) {
-        return 0;
-    }
-
-    @Override
-    public void breakBlock(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull IBlockState state) {
-        TileEntity te = world.getTileEntity(pos);
-        if (te != null) {
-            TileSieve sieve = (TileSieve) te;
-            if (!sieve.getMeshStack().isEmpty())
-                Util.dropItemInWorld(sieve, null, sieve.getMeshStack(), 0.02f);
-        }
-
-        super.breakBlock(world, pos, state);
-    }
-
-
-    @Override
-    public TileEntity createNewTileEntity(@Nonnull World worldIn, int meta) {
-        return new TileSieve();
-    }
-
-    //region >>>> RENDERING OPTIONS
-    @Override
-    @Deprecated
-    public boolean isFullBlock(IBlockState state) {
-        return false;
-    }
-
-    @Override
-    @Deprecated
-    public boolean isOpaqueCube(IBlockState state) {
-        return false;
-    }
-
-    @Override
-    @Deprecated
-    public boolean isFullCube(IBlockState state) {
-        return false;
-    }
-
-    @Override
-    public boolean shouldSideBeRendered(IBlockState blockState, @Nonnull IBlockAccess blockAccess, @Nonnull BlockPos pos, EnumFacing side) {
-        return false;
     }
     //endregion
 

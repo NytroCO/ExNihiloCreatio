@@ -43,21 +43,6 @@ public class ItemPebble extends Item implements IHasModel {
 
     @Override
     @Nonnull
-    public String getTranslationKey(ItemStack stack) {
-        return getTranslationKey() + "." + names.get(stack.getItemDamage());
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void getSubItems(@Nullable CreativeTabs tab, @Nonnull NonNullList<ItemStack> list) {
-        if (this.isInCreativeTab(tab))
-            for (int i = 0; i < names.size(); i++) {
-                list.add(new ItemStack(this, 1, i));
-            }
-    }
-
-    @Override
-    @Nonnull
     public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, @Nonnull EnumHand hand) {
         ItemStack stack = player.getHeldItem(hand);
 
@@ -75,6 +60,21 @@ public class ItemPebble extends Item implements IHasModel {
         }
 
         return new ActionResult<>(EnumActionResult.SUCCESS, stack);
+    }
+
+    @Override
+    @Nonnull
+    public String getTranslationKey(ItemStack stack) {
+        return getTranslationKey() + "." + names.get(stack.getItemDamage());
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void getSubItems(@Nullable CreativeTabs tab, @Nonnull NonNullList<ItemStack> list) {
+        if (this.isInCreativeTab(tab))
+            for (int i = 0; i < names.size(); i++) {
+                list.add(new ItemStack(this, 1, i));
+            }
     }
 
     public String getPebbleType(ItemStack stack) {

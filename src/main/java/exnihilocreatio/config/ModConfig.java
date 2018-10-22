@@ -121,7 +121,7 @@ public class ModConfig {
     public static class Ore {
         public String chunkBaseOreDictName = "ore";
         public String pieceBaseOreDictName = "piece";
-        public String dustBaseOreDictName  = "dust";
+        public String dustBaseOreDictName = "dust";
         public String ingotBaseOreDictName = "ingot";
     }
 

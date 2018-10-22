@@ -8,6 +8,7 @@ import lombok.Getter;
 public class MoreBees implements IRecipeDefaults {
     @Getter
     public String MODID = "morebees";
+
     @Override
     public void registerSieve(SieveRegistry registry) {
         /*

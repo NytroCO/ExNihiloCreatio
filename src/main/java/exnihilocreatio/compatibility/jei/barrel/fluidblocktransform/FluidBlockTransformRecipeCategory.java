@@ -49,8 +49,19 @@ public class FluidBlockTransformRecipeCategory implements IRecipeCategory<FluidB
     }
 
     @Override
+    public IDrawable getIcon() {
+        return null;
+    }
+
+    @Override
     public void drawExtras(@Nonnull Minecraft minecraft) {
 
+    }
+
+    @Override
+    public void setRecipe(@Nonnull IRecipeLayout recipeLayout, @Nonnull FluidBlockTransformRecipe recipeWrapper, @Nonnull IIngredients ingredients) {
+        // I learn from the best
+        setRecipe(recipeLayout, recipeWrapper);
     }
 
     @SuppressWarnings("Duplicates")
@@ -64,16 +75,5 @@ public class FluidBlockTransformRecipeCategory implements IRecipeCategory<FluidB
         recipeLayout.getItemStacks().set(1, recipeWrapper.getInputs().get(0));
         recipeLayout.getItemStacks().set(2, recipeWrapper.getInputs().get(1));
         recipeLayout.getItemStacks().set(3, recipeWrapper.getOutput());
-    }
-
-    @Override
-    public void setRecipe(@Nonnull IRecipeLayout recipeLayout, @Nonnull FluidBlockTransformRecipe recipeWrapper, @Nonnull IIngredients ingredients) {
-        // I learn from the best
-        setRecipe(recipeLayout, recipeWrapper);
-    }
-
-    @Override
-    public IDrawable getIcon() {
-        return null;
     }
 }

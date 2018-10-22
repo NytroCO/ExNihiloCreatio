@@ -9,8 +9,6 @@ import javax.annotation.Nonnull;
 
 public interface StackInfo {
 
-    String toString();
-
     @Nonnull
     ItemStack getItemStack();
 
@@ -32,9 +30,12 @@ public interface StackInfo {
 
     /**
      * This is used to check if the contents equals the objects, based on what the object is
+     *
      * @param obj The object to check
      * @return Returns true if the output ItemStacks match
      */
     @Override
     boolean equals(Object obj);
+
+    String toString();
 }

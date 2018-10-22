@@ -65,6 +65,11 @@ public class SieveRecipeCategory implements IRecipeCategory<SieveRecipe> {
     }
 
     @Override
+    public IDrawable getIcon() {
+        return null;
+    }
+
+    @Override
     public void drawExtras(@Nonnull Minecraft minecraft) {
         if (hasHighlight) {
             slotHighlight.draw(minecraft, highlightX, highlightY);
@@ -138,10 +143,5 @@ public class SieveRecipeCategory implements IRecipeCategory<SieveRecipe> {
             }
         });
 
-    }
-
-    @Override
-    public IDrawable getIcon() {
-        return null;
     }
 }

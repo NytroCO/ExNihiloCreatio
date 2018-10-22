@@ -44,22 +44,6 @@ public class FluidBlockTransformRecipe implements IRecipeWrapper {
         ingredients.setOutput(ItemStack.class, outputStack);
     }
 
-    public List<List<ItemStack>> getInputs() {
-        return ImmutableList.of(Collections.singletonList(inputBucket), inputStacks);
-    }
-
-    public ItemStack getOutput() {
-        return outputStack;
-    }
-
-    public List<FluidStack> getFluidInputs() {
-        return ImmutableList.of(inputFluid);
-    }
-
-    public boolean isValid() {
-        return !inputBucket.isEmpty() && !inputStacks.isEmpty() && !outputStack.isEmpty();
-    }
-
     @Override
     public void drawInfo(@Nonnull Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
 
@@ -74,5 +58,21 @@ public class FluidBlockTransformRecipe implements IRecipeWrapper {
     @Override
     public boolean handleClick(@Nonnull Minecraft minecraft, int mouseX, int mouseY, int mouseButton) {
         return false;
+    }
+
+    public List<List<ItemStack>> getInputs() {
+        return ImmutableList.of(Collections.singletonList(inputBucket), inputStacks);
+    }
+
+    public ItemStack getOutput() {
+        return outputStack;
+    }
+
+    public List<FluidStack> getFluidInputs() {
+        return ImmutableList.of(inputFluid);
+    }
+
+    public boolean isValid() {
+        return !inputBucket.isEmpty() && !inputStacks.isEmpty() && !outputStack.isEmpty();
     }
 }

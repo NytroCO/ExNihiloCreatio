@@ -42,7 +42,7 @@ public class BlockEndCake extends BlockCake implements IHasModel {
 
             if (itemstack.getItem() == Items.ENDER_EYE && bites > 0) {
 
-                if (!worldIn.isRemote){
+                if (!worldIn.isRemote) {
                     worldIn.setBlockState(pos, state.withProperty(BITES, bites - 1), 3);
                     itemstack.shrink(1);
                 }
@@ -54,6 +54,10 @@ public class BlockEndCake extends BlockCake implements IHasModel {
         return false;
     }
 
+    @Override
+    public ItemStack getItem(World worldIn, BlockPos pos, IBlockState state) {
+        return new ItemStack(ModBlocks.endCake);
+    }
 
     public boolean eatCake(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player) {
         if (!player.canEat(false) || player.dimension == 1) {
@@ -75,11 +79,5 @@ public class BlockEndCake extends BlockCake implements IHasModel {
 
             return true;
         }
-    }
-
-    @Override
-    public ItemStack getItem(World worldIn, BlockPos pos, IBlockState state)
-    {
-        return new ItemStack(ModBlocks.endCake);
     }
 }

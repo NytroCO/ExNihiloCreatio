@@ -211,7 +211,7 @@ public class TileSieve extends BaseTileEntity {
                             newStack = cap.insertItem(i, newStack, false);
                         }
 
-                        if (!newStack.isEmpty()){
+                        if (!newStack.isEmpty()) {
                             Util.dropItemInWorld(this, player, newStack, 1);
                         }
 
@@ -219,7 +219,6 @@ public class TileSieve extends BaseTileEntity {
                 } else {
                     drops.forEach(stack -> Util.dropItemInWorld(this, player, stack, 1));
                 }
-
 
 
                 resetSieve();
@@ -256,8 +255,22 @@ public class TileSieve extends BaseTileEntity {
     }
 
     @Override
-    public boolean shouldRefresh(World world, BlockPos pos, @Nonnull IBlockState oldState, @Nonnull IBlockState newState) {
-        return oldState.getBlock() != newState.getBlock();
+    public void readFromNBT(NBTTagCompound tag) {
+        if (tag.hasKey("stack"))
+            currentStack = BlockInfo.readFromNBT(tag.getCompoundTag("stack"));
+        else
+            currentStack = BlockInfo.EMPTY;
+
+        if (tag.hasKey("mesh")) {
+            meshStack = new ItemStack(tag.getCompoundTag("mesh"));
+            meshType = BlockSieve.MeshType.getMeshTypeByID(meshStack.getMetadata());
+        } else {
+            meshStack = ItemStack.EMPTY;
+            meshType = BlockSieve.MeshType.NONE;
+        }
+
+        progress = tag.getByte("progress");
+        super.readFromNBT(tag);
     }
 
     @Override
@@ -279,22 +292,8 @@ public class TileSieve extends BaseTileEntity {
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound tag) {
-        if (tag.hasKey("stack"))
-            currentStack = BlockInfo.readFromNBT(tag.getCompoundTag("stack"));
-        else
-            currentStack = BlockInfo.EMPTY;
-
-        if (tag.hasKey("mesh")) {
-            meshStack = new ItemStack(tag.getCompoundTag("mesh"));
-            meshType = BlockSieve.MeshType.getMeshTypeByID(meshStack.getMetadata());
-        } else {
-            meshStack = ItemStack.EMPTY;
-            meshType = BlockSieve.MeshType.NONE;
-        }
-
-        progress = tag.getByte("progress");
-        super.readFromNBT(tag);
+    public boolean shouldRefresh(World world, BlockPos pos, @Nonnull IBlockState oldState, @Nonnull IBlockState newState) {
+        return oldState.getBlock() != newState.getBlock();
     }
 
     @Override

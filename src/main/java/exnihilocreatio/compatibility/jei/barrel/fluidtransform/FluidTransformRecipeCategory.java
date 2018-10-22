@@ -58,10 +58,21 @@ public class FluidTransformRecipeCategory implements IRecipeCategory<FluidTransf
     }
 
     @Override
+    public IDrawable getIcon() {
+        return null;
+    }
+
+    @Override
     public void drawExtras(@Nonnull Minecraft minecraft) {
         if (hasHighlight) {
             slotHighlight.draw(minecraft, highlightX, highlightY);
         }
+    }
+
+    @Override
+    public void setRecipe(@Nonnull IRecipeLayout recipeLayout, @Nonnull FluidTransformRecipe recipeWrapper, @Nonnull IIngredients ingredients) {
+        // I learn from the best
+        setRecipe(recipeLayout, recipeWrapper);
     }
 
     private void setRecipe(IRecipeLayout recipeLayout, FluidTransformRecipe recipeWrapper) {
@@ -92,16 +103,5 @@ public class FluidTransformRecipeCategory implements IRecipeCategory<FluidTransf
         recipeLayout.getItemStacks().set(1, recipeWrapper.getInputs().get(0));
         recipeLayout.getItemStacks().set(2, noCycle ? focusStack : ImmutableList.copyOf(recipeWrapper.getInputs().subList(1, recipeWrapper.getInputs().size())));
         recipeLayout.getItemStacks().set(3, recipeWrapper.getOutputs().get(0));
-    }
-
-    @Override
-    public void setRecipe(@Nonnull IRecipeLayout recipeLayout, @Nonnull FluidTransformRecipe recipeWrapper, @Nonnull IIngredients ingredients) {
-        // I learn from the best
-        setRecipe(recipeLayout, recipeWrapper);
-    }
-
-    @Override
-    public IDrawable getIcon() {
-        return null;
     }
 }

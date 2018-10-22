@@ -19,8 +19,10 @@ public class BarrelItemHandlerBlock extends ItemStackHandler {
     }
 
     @Override
-    protected int getStackLimit(int slot, @Nonnull ItemStack stack) {
-        return stack.getMaxStackSize();
+    public void setStackInSlot(int slot, @Nonnull ItemStack stack) {
+        super.setStackInSlot(slot, stack);
+
+        checkEmpty();
     }
 
     @Override
@@ -46,10 +48,8 @@ public class BarrelItemHandlerBlock extends ItemStackHandler {
     }
 
     @Override
-    public void setStackInSlot(int slot, @Nonnull ItemStack stack) {
-        super.setStackInSlot(slot, stack);
-
-        checkEmpty();
+    protected int getStackLimit(int slot, @Nonnull ItemStack stack) {
+        return stack.getMaxStackSize();
     }
 
     private void checkEmpty() {

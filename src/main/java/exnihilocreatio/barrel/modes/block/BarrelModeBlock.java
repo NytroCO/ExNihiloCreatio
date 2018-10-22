@@ -70,13 +70,6 @@ public class BarrelModeBlock implements IBarrelMode {
     }
 
     @Override
-    public List<String> getWailaTooltip(TileBarrel barrel, List<String> currenttip) {
-        if (!handler.getStackInSlot(0).isEmpty())
-            currenttip.add(handler.getStackInSlot(0).getDisplayName());
-        return currenttip;
-    }
-
-    @Override
     public void onBlockActivated(World world, TileBarrel barrel, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (!handler.getStackInSlot(0).isEmpty()) {
             Util.dropItemInWorld(barrel, player, handler.getStackInSlot(0), 0.02);
@@ -135,6 +128,13 @@ public class BarrelModeBlock implements IBarrelMode {
     @Override
     public boolean canFillWithFluid(TileBarrel barrel) {
         return false;
+    }
+
+    @Override
+    public List<String> getWailaTooltip(TileBarrel barrel, List<String> currenttip) {
+        if (!handler.getStackInSlot(0).isEmpty())
+            currenttip.add(handler.getStackInSlot(0).getDisplayName());
+        return currenttip;
     }
 
 }

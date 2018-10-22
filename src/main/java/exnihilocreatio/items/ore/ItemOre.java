@@ -21,7 +21,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Nonnull;
 import java.util.Map;
-import java.util.Map;
 
 @SuppressWarnings("deprecation")
 public class ItemOre extends Item implements IHasModel, IHasSpecialRegistry {
@@ -43,18 +42,6 @@ public class ItemOre extends Item implements IHasModel, IHasSpecialRegistry {
         setHasSubtypes(true);
 
         Data.ITEMS.add(this);
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void getSubItems(@Nonnull CreativeTabs tab, @Nonnull NonNullList<ItemStack> list) {
-        if (this.isInCreativeTab(tab)) {
-            list.add(new ItemStack(this, 1, 0)); //Piece
-            list.add(new ItemStack(this, 1, 1)); //Chunk
-            list.add(new ItemStack(this, 1, 2)); //Dust
-            if (registerIngot)
-                list.add(new ItemStack(this, 1, 3)); //Ingot
-        }
     }
 
     @Override
@@ -101,6 +88,18 @@ public class ItemOre extends Item implements IHasModel, IHasSpecialRegistry {
         }
 
         return (transString + " " + I18n.translateToLocal(pre + ".name")).trim();
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void getSubItems(@Nonnull CreativeTabs tab, @Nonnull NonNullList<ItemStack> list) {
+        if (this.isInCreativeTab(tab)) {
+            list.add(new ItemStack(this, 1, 0)); //Piece
+            list.add(new ItemStack(this, 1, 1)); //Chunk
+            list.add(new ItemStack(this, 1, 2)); //Dust
+            if (registerIngot)
+                list.add(new ItemStack(this, 1, 3)); //Ingot
+        }
     }
 
 }

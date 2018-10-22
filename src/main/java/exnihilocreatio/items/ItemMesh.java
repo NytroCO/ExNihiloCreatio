@@ -30,6 +30,30 @@ public class ItemMesh extends Item implements IHasModel {
     }
 
     @Override
+    @Nonnull
+    public String getTranslationKey(ItemStack stack) {
+        return super.getTranslationKey() + "." + stack.getItemDamage();
+    }
+
+    @Override
+    public boolean isEnchantable(ItemStack stack) {
+        return true;
+    }
+
+    @Override
+    public void getSubItems(@Nonnull CreativeTabs tab, @Nonnull NonNullList<ItemStack> list) {
+        if (this.isInCreativeTab(tab))
+            for (int i = 1; i < MeshType.values().length - 1; i++) { //0 is the "none" case, 5 the "no render" case
+                list.add(new ItemStack(this, 1, i));
+            }
+    }
+
+    @Override
+    public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
+        return stack.getCount() == 1;
+    }
+
+    @Override
     public int getItemEnchantability(ItemStack stack) {
         switch (stack.getMetadata()) {
             case 1:
@@ -43,31 +67,6 @@ public class ItemMesh extends Item implements IHasModel {
             default:
                 return 0;
         }
-    }
-
-    @Override
-    public boolean isEnchantable(ItemStack stack){
-        return true;
-    }
-
-    @Override
-    public boolean isBookEnchantable(ItemStack stack, ItemStack book)
-    {
-        return stack.getCount() == 1;
-    }
-
-    @Override
-    @Nonnull
-    public String getTranslationKey(ItemStack stack) {
-        return super.getTranslationKey() + "." + stack.getItemDamage();
-    }
-
-    @Override
-    public void getSubItems(@Nonnull CreativeTabs tab, @Nonnull NonNullList<ItemStack> list) {
-        if (this.isInCreativeTab(tab))
-            for (int i = 1; i < MeshType.values().length - 1; i++) { //0 is the "none" case, 5 the "no render" case
-                list.add(new ItemStack(this, 1, i));
-            }
     }
 
     @Override
